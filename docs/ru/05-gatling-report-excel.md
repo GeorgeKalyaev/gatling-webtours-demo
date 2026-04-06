@@ -194,15 +194,25 @@
 
 ---
 
-## 4. Сводный HTML по эндпоинтам без групп (два генератора, на сервере)
+## 4. Сводная таблица по эндпоинтам без групп (HTML, два генератора, на сервере)
 
-Альтернатива «только Excel»: на одном из генераторов в каталоге `…_full/` создать папку (например `svodnaia_table`), скопировать туда `without_groups/simulation_without_groups.log` с **этого** хоста, второй лог — с другого генератора (`scp` или WinSCP), затем сгенерировать отчёт **только из логов**:
+Альтернатива цепочке с Excel: собрать **сводный HTML-отчёт** Gatling по логам **без групп** с **двух** генераторов.
+
+1. На **одном** из генераторов перейдите в каталог результата **`…/gatling-charts-highcharts-bundle-3.9.5/results/debug-…_full/`** — тот же прогон, для которого ранее запускали **`reportsZip.sh`**. Пример полного пути: `/home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164039914_full/`.
+
+2. Внутри уже будут папки **`without_groups`** и **`with_groups`**.
+
+3. Создайте **третью** папку, например **`svodnaia_table`**, на том же уровне.
+
+   ![Файловый менеджер: в `_full` — without_groups, with_groups и svodnaia_table](../images/gatling-full-svodnaia-table-folder.png)
+
+Далее скопируйте в **`svodnaia_table`** лог **`without_groups/simulation_without_groups.log`** с **этого** хоста (например в **`simulation.log`**), второй такой лог — с другого генератора (`scp` или WinSCP; имена файлов согласуйте с вашей версией Gatling для **reports-only**). Затем сгенерируйте отчёт **только из логов**:
 
 ```bash
 /path/to/gatling-charts-highcharts-bundle-3.9.5/bin/gatling.sh -nr -ro /path/to/results/debug-…_full/svodnaia_table/
 ```
 
-Имена файлов в `svodnaia_table` должны быть согласованы с тем, как Gatling ожидает вход для **reports-only** (в инструкции встречались варианты вроде `simulation.log` и второго файла с другим именем). При расхождении со скриншотами проверьте документацию вашей версии Gatling для **`-ro`**.
+Имена файлов в **`svodnaia_table`** должны совпадать с тем, что ожидает режим **`-ro`** для вашей версии Gatling (в разных инструкциях встречались варианты вроде **`simulation.log`** и второго файла с другим именем). При расхождении проверьте документацию Gatling по **`gatling.sh -ro`**.
 
 ---
 

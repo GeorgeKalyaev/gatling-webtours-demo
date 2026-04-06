@@ -194,15 +194,25 @@ Unlike `combineB2C.py`, this script **does not** unpack a zip — it reads **`wi
 
 ---
 
-## 4. Summary HTML for endpoints without groups (two generators, on server)
+## 4. Summary table by endpoints without groups (HTML, two generators, on server)
 
-Instead of Excel only: under `…_full/`, create a folder (e.g. `svodnaia_table`), copy `without_groups/simulation_without_groups.log` from this host, copy the peer log from the other host (`scp` or WinSCP), then:
+Instead of the Excel workflow: build a Gatling **HTML summary** from **no-group** logs on **two** generators.
+
+1. On **one** generator, open **`…/gatling-charts-highcharts-bundle-3.9.5/results/debug-…_full/`** — the same run you packaged with **`reportsZip.sh`**. Example: `/home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164039914_full/`.
+
+2. You should already see **`without_groups`** and **`with_groups`**.
+
+3. Create a **third** folder at the same level, e.g. **`svodnaia_table`**.
+
+   ![File manager: under `_full` — without_groups, with_groups, and svodnaia_table](../images/gatling-full-svodnaia-table-folder.png)
+
+Then copy **`without_groups/simulation_without_groups.log`** from this host into **`svodnaia_table`** (e.g. as **`simulation.log`**), copy the peer log from the other generator (`scp` or WinSCP; file names must match what your Gatling version expects for **reports-only**). Generate the report **from logs only**:
 
 ```bash
 /path/to/gatling-charts-highcharts-bundle-3.9.5/bin/gatling.sh -nr -ro /path/to/results/debug-…_full/svodnaia_table/
 ```
 
-File names inside `svodnaia_table` must match what **reports-only** mode expects for your Gatling version; if your layout differs from the internal guide, check the docs for **`-ro`**.
+File names inside **`svodnaia_table`** must match **`-ro`** for your Gatling version (guides vary, e.g. **`simulation.log`** plus a second file). If something fails, check the Gatling docs for **`gatling.sh -ro`**.
 
 ---
 
