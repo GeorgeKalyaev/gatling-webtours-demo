@@ -108,14 +108,35 @@ To merge statistics later, run the packaging steps **on every generator** (same 
 
 Repeat steps **1–6 on the second generator**, then download **both** `…_full.zip` files to your PC.
 
-### 3.1. Example folder layout
+### 3.1. Inside `_full`, download logs, PC folder layout (steps 7–15)
+
+7. Under each **`debug-…_full`** directory (from the zip or on the host) you have **`without_groups`** and **`with_groups`**; each contains its own **`simulation.log`** (with and without Gatling groups).
+
+8. Repeat on the **second** generator. You end up with **four** log files: one in **`with_groups`** and one in **`without_groups`** on **each** machine.
+
+9. **Copy / download** all four logs to your PC (SFTP, WinSCP, etc.).
+
+10. Create a working folder, e.g. **`task2`**, and place **[`MergeSimulation.py`](../../tools/reporting/MergeSimulation.py)** there.
+
+11. Inside **`task2`**, create **`test1`**, then **another nested** folder also named **`test1`**, so the path is **`Report1\task2\test1\test1`** (top-level `Report1` is optional, match your layout).
+
+12. Inside the **inner** **`test1`**, create **`with_groups`** and **`without_groups`**.
+
+13. In **`with_groups`**, add **`simulation.log`** from generator **1** (`…_full/with_groups/`) and **`simulation.log`** from generator **2** (same path on the other host). Because names collide, **rename one** (example below: `simulation1.log`).
+
+14. In **`without_groups`**, do the same for both **`without_groups`** logs; rename the second file if needed (e.g. **`simulation2.log`**).
+
+15. **`with_groups`** should look like this: two log files side by side (**`simulation.log`** and **`simulation1.log`** in the example).
+
+   ![Explorer: Report1\task2\test1\test1\with_groups — two logs from two generators](../images/two-generators-with-groups-two-logs.png)
+
+Summary:
 
 ```text
-Report1/task2/test1/test1/with_groups/     ← simulation.log + simulation1.log (one per host)
-Report1/task2/test1/test1/without_groups/  ← simulation.log + simulation2.log
+Report1/task2/MergeSimulation.py
+Report1/task2/test1/test1/with_groups/     simulation.log + simulation1.log
+Report1/task2/test1/test1/without_groups/ simulation.log + simulation2.log   (secondary names — your choice)
 ```
-
-Secondary file names may vary; you need **one** merged log per branch in the end.
 
 ### 3.2. `MergeSimulation.py`
 
