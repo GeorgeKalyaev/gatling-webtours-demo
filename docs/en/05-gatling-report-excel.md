@@ -178,13 +178,13 @@ Unlike `combineB2C.py`, this script **does not** unpack a zip — it reads **`wi
 
 25. Place **[`combineB2C_NOZIP.py`](../../tools/reporting/combineB2C_NOZIP.py)** in **`Report1\task2\`** (next to the **`test1`** folder as in the layout above).
 
-26. In **CMD**, `cd` to **`Report1\task2`** and run **`python combineB2C_NOZIP.py`**. When prompted for the **output file name**, enter a name **without extension** (screenshot example: **`itogovii_file`** → **`itogovii_file.xls`**).
+26. In **CMD**, `cd` to **`Report1\task2`** and run **`python combineB2C_NOZIP.py`**. When prompted for the **output file name**, enter a name **without extension** (example: **`itogovii_file`** → **`itogovii_file.xls`** on disk).
 
-   ![CMD: combineB2C_NOZIP.py — output file name](../images/combineB2C_NOZIP-cmd-output-filename.png)
+27. When prompted for the **folder name**, enter the **outer** folder that sits **next to** **`combineB2C_NOZIP.py`** — in the walkthrough that is **`test1`** (i.e. **`Report1\task2\test1\`**). In [`combineB2C_NOZIP.py`](../../tools/reporting/combineB2C_NOZIP.py), the code appends paths like **`test1\with_groups\…`** and **`test1\without_groups\…`** to that folder, so for a tree **`task2\test1\test1\with_groups`** typing a single **`test1`** is enough. The console then prints a line such as **`Объединенные результаты сохранены в itogovii_file.xls`**.
 
-27. When prompted for the **folder name**, enter the path **relative to `task2`** that contains **`with_groups`** and **`without_groups`**. With nesting **`test1\test1`**, use e.g. **`test1\test1`** (backslashes as in the script) or whatever matches your tree so **`…\with_groups\simulation.log`** and **`…\without_groups\simulation_without_groups.log`** resolve.
+   ![CMD: combineB2C_NOZIP.py — both prompts and saving itogovii_file.xls](../images/combineB2C_NOZIP-cmd-full-session.png)
 
-The **`.xls`** is created in **`task2`**; **Errors** and **Requests per min** reflect the **combined** two-generator logs.
+The **`.xls`** is written under **`task2`**; **Errors** and **Requests per min** reflect the **combined** two-generator logs.
 
 ---
 

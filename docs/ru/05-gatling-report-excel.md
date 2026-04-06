@@ -178,13 +178,13 @@
 
 25. Положите **[`combineB2C_NOZIP.py`](../../tools/reporting/combineB2C_NOZIP.py)** в **`Отчет1\task2\`** (рядом с каталогом **`test1`**, как на схеме выше).
 
-26. В **CMD** перейдите в **`Отчет1\task2`** и выполните **`python combineB2C_NOZIP.py`**. На запрос **«Введите имя результирующего файла:»** введите имя **без расширения** (пример на скриншоте — **`itogovii_file`** → **`itogovii_file.xls`**).
+26. В **CMD** перейдите в **`Отчет1\task2`** и выполните **`python combineB2C_NOZIP.py`**. На запрос **«Введите имя результирующего файла:»** введите имя **без расширения** (пример — **`itogovii_file`** → на диске будет **`itogovii_file.xls`**).
 
-   ![CMD: combineB2C_NOZIP.py — имя результирующего файла](../images/combineB2C_NOZIP-cmd-output-filename.png)
+27. На запрос **«Введите имя папки:»** укажите имя **внешней** папки, которая лежит **в той же директории, что и** **`combineB2C_NOZIP.py`** — в примере это **`test1`** (т.е. **`Отчет1\task2\test1\`**). В [`combineB2C_NOZIP.py`](../../tools/reporting/combineB2C_NOZIP.py) к ней дописываются хвосты вида **`test1\with_groups\…`** и **`test1\without_groups\…`**, поэтому при структуре **`task2\test1\test1\with_groups`** достаточно ввести одно слово **`test1`**. После выполнения в консоли появится строка вида **`Объединенные результаты сохранены в itogovii_file.xls`**.
 
-27. На запрос **«Введите имя папки:»** укажите путь **относительно текущей папки** (`task2`) до каталога, внутри которого лежат **`with_groups`** и **`without_groups`**. При вложении **`test1\test1`** введите, например, **`test1\test1`** (как в скрипте — обратные слэши) или попробуйте вариант, подходящий вашему дереву; главное — чтобы существовали подпути **`…\with_groups\simulation.log`** и **`…\without_groups\simulation_without_groups.log`**.
+   ![CMD: combineB2C_NOZIP.py — оба запроса и сохранение itogovii_file.xls](../images/combineB2C_NOZIP-cmd-full-session.png)
 
-Итоговый **`.xls`** появится в **`task2`**; вкладки **Errors** и **Requests per min** — по **объединённым** логам двух генераторов.
+Итоговый **`.xls`** создаётся в **`task2`**; вкладки **Errors** и **Requests per min** — по **объединённым** логам двух генераторов.
 
 ---
 
