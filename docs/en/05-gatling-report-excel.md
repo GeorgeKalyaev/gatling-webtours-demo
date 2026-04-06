@@ -16,21 +16,25 @@ The script is **interactive**. Run it on the host where the **Gatling bundle** l
 
    ![Home directory on the load generator: Gatling bundle folder and `reportsZip.sh` side by side](../images/reportsZip-same-level-as-bundle.png)
 
-2. Run: `sh /home/USER/reportsZip.sh` (use your path).
-3. Enter the **full path to the Gatling root**, e.g. `/home/USER/gatling-charts-highcharts-bundle-3.9.5`.
-4. Enter the **full path to `results/`**, e.g. `/home/USER/gatling-charts-highcharts-bundle-3.9.5/results/`.
-5. Enter the **run folder name** (no trailing slash).
+2. Run the script, e.g. `/home/g_kalyaev/reportsZip.sh` (if execute permission is missing, use `sh /home/g_kalyaev/reportsZip.sh`; adjust user and path).
+3. When prompted for the **full path to the Gatling folder**, enter e.g. `/home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5`.
+4. When prompted for the **full path to the results folder**, enter e.g. `/home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/`.
+5. When prompted for the **run folder name** (no trailing slash), enter the directory that contains **`simulation.log`**, e.g. `debug-20231002164043692`.
 
-**Output:** under `results/`, a directory `<name>_full` and `<name>_full.zip`. Inside `_full`:
+6. After the script finishes, under `…/gatling-charts-highcharts-bundle-3.9.5/results/` you should see a **`<name>_full` directory** and a **`<name>_full.zip`** archive (screenshot below for the same example run).
+
+   ![Results directory: `…_full` folder and `…_full.zip` archive](../images/results-full-folder-and-zip.png)
+
+7. Download **`…_full.zip`** to your PC. The archive holds **`simulation.log`** in two forms: **with** Gatling groups and **without** (see **`with_groups`** and **`without_groups`** inside `_full`). The **grouped** report may **fail to build** if the log is very large and the generator runs **out of memory**.
+
+Inside `<name>_full`:
 
 - **`with_groups/`** — artifacts and **`simulation.log`** with groups;
 - **`without_groups/`** — log **without** `GROUP` lines (filtered + second **reports-only** Gatling pass).
 
-On a **low-memory** generator, the grouped pass on a huge log may fail; that is an environment limit.
-
 **Path caveat:** the “with groups” branch calls `sh ./gatling-charts-highcharts-bundle-3.9.5/bin/gatling.sh` from the **current working directory** after internal `cd` steps. The bundle folder name and location must match your install; change that line in `reportsZip.sh` or mirror the original layout. The “without groups” branch uses `${path}/bin/gatling.sh`.
 
-Download **`…_full.zip`** to your PC for the next step.
+Continue with section 2 on the PC.
 
 ---
 
