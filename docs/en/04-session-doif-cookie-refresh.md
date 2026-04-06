@@ -1,8 +1,8 @@
-# Session branching: `doIf`, error flag, cookie refresh
+# Checking for any error in the previous step via `doIf(session => session("ifFailed").as[Boolean])`
 
 **[← Documentation home](../../README.md)** · **[Русская версия](../ru/04-session-doif-cookie-refresh.md)**
 
-This note describes a common pattern: after one or more HTTP steps, **branch in the scenario** depending on whether the session is in a failed state, optionally **log identifiers to CSV**, and **rotate cookies** before the next requests.
+Also covers a **cookie refresh** example and CSV logging when branching the scenario.
 
 ---
 
