@@ -142,15 +142,23 @@ Report1/task2/test1/test1/with_groups/     simulation.log + simulation1.log
 Report1/task2/test1/test1/without_groups/ simulation.log + simulation2.log   (secondary names — your choice)
 ```
 
-### 3.2. `MergeSimulation.py`
+### 3.2. `MergeSimulation.py` (steps 17–20)
 
-1. Set **`input_folder`** in [`MergeSimulation.py`](../../tools/reporting/MergeSimulation.py) to the directory that holds the `.log` files (the original guide used **forward slashes** in paths).
-2. Run: `python MergeSimulation.py` — creates **`output_file`** (default in repo: `merged_simulation.log`).
+17. In [`MergeSimulation.py`](../../tools/reporting/MergeSimulation.py), set **`input_folder`** to the folder that contains the **two logs for the first merge** — **`…/test1/test1/with_groups`**. Use **forward slashes** `/` even on Windows, e.g.:
 
-Repeat for **`with_groups`** and **`without_groups`**, then rename as required:
+   `C:/Users/OUT-Kalyaev-GK/Desktop/Отчет1/task2/test1/test1/with_groups`
 
-- **`with_groups`:** merged file → **`simulation.log`**;
-- **`without_groups`:** merged file → **`simulation_without_groups.log`**.
+   Adjust user and drive; the path must end at **`with_groups`**, not a file name.
+
+18. In **CMD**, `cd` to **`task2`** (where the script lives) and run: `python MergeSimulation.py`. Output lists each **`*.log`** processed and a line that the merged file was saved. The file name comes from **`output_file`** in the script (repo default **`merged_simulation.log`**; the screenshot example uses **`общий_лог.log`** if you set that).
+
+   ![CMD: MergeSimulation.py merges simulation.log and simulation1.log from with_groups](../images/MergeSimulation-cmd-with-groups.png)
+
+   The merged log is written to the **current working directory** (usually **`task2`**) unless **`output_file`** is an absolute path.
+
+19. **`with_groups`:** move the merged file into **`…/test1/test1/with_groups/`**, remove or move aside the original **`simulation.log`** and **`simulation1.log`**, then **rename** the merged file to **`simulation.log`** (only one file with that name should remain for the next step).
+
+20. **`without_groups`:** set **`input_folder`** to **`…/test1/test1/without_groups`**, adjust **`output_file`** if needed, run **`python MergeSimulation.py`** from **`task2`** again, move the result into **`without_groups`**, remove the two source logs, and rename the merged file to **`simulation_without_groups.log`** (as expected by `combineB2C_NOZIP.py`).
 
 ### 3.3. `combineB2C_NOZIP.py`
 

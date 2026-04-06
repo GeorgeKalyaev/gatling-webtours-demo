@@ -142,15 +142,23 @@
 Отчет1/task2/test1/test1/without_groups/ simulation.log + simulation2.log   (имена вторых файлов — по вашему правилу)
 ```
 
-### 3.2. `MergeSimulation.py`
+### 3.2. `MergeSimulation.py` (шаги 17–20)
 
-1. В [`MergeSimulation.py`](../../tools/reporting/MergeSimulation.py) задать **`input_folder`** на каталог с логами (в инструкции — прямой путь с **прямыми слэшами** `/`).
-2. Запуск из удобного каталога: `python MergeSimulation.py` — появится файл с именем **`output_file`** (в репозитории по умолчанию `merged_simulation.log`).
+17. В [`MergeSimulation.py`](../../tools/reporting/MergeSimulation.py) задать **`input_folder`** на каталог с двумя логами для первого слияния — **`…/test1/test1/with_groups`**. Путь указывайте **с прямыми слэшами** `/` (в том числе на Windows), например:
 
-Повторите для **`with_groups`** и для **`without_groups`**: в каждой папке в итоге должен остаться **один** лог с нужным именем:
+   `C:/Users/OUT-Kalyaev-GK/Desktop/Отчет1/task2/test1/test1/with_groups`
 
-- в **`with_groups`**: переименовать объединённый файл в **`simulation.log`**;
-- в **`without_groups`**: переименовать в **`simulation_without_groups.log`** (как в исходной инструкции).
+   Подставьте свой каталог пользователя и диск; конец пути — **`with_groups`**, не файл.
+
+18. В **CMD** перейти в папку **`task2`** (где лежит скрипт) и выполнить: `python MergeSimulation.py`. В выводе — обработка каждого **`*.log`** в `input_folder` и строка о сохранении объединённого файла. Имя файла задаётся переменной **`output_file`** в скрипте (в репозитории по умолчанию **`merged_simulation.log`**; в учебном примере на скриншоте — **`общий_лог.log`**, если так задано у вас).
+
+   ![CMD: MergeSimulation.py склеивает simulation.log и simulation1.log из with_groups](../images/MergeSimulation-cmd-with-groups.png)
+
+   Объединённый лог создаётся в **текущей рабочей папке** запуска (обычно **`task2`**), если для **`output_file`** не указан полный путь.
+
+19. **Для `with_groups`:** перенесите получившийся объединённый файл в **`…/test1/test1/with_groups/`**, удалите или уберите в сторону исходные **`simulation.log`** и **`simulation1.log`**, объединённый файл **переименуйте** в **`simulation.log`** (в этой папке должен остаться один лог с таким именем для следующего шага).
+
+20. **Для `without_groups`:** снова отредактируйте **`input_folder`** на путь к **`…/test1/test1/without_groups`**, при необходимости смените **`output_file`**, снова запустите **`python MergeSimulation.py`** из **`task2`**, затем перенесите результат в **`without_groups`**, исходные два лога уберите, объединённый файл переименуйте в **`simulation_without_groups.log`** (как ожидает `combineB2C_NOZIP.py`).
 
 ### 3.3. `combineB2C_NOZIP.py`
 
