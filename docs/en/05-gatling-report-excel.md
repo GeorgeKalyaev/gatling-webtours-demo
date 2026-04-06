@@ -69,6 +69,10 @@ While running, it reads:
 
    ![CMD: both interactive prompts for combineB2C.py](../images/combineB2C-cmd-both-prompts.png)
 
+6. **In the working folder**, after a successful run you get the **`.xls` report** (example: `statistika.xls` from step 3) and a **directory** with the **extracted** archive contents (e.g. `debug-20231002164043692_full` — same base name as `…_full.zip` without the extension). `combineB2C.py` and the original zip remain alongside.
+
+   ![File Explorer: script, zip, extracted `_full` folder, and `statistika.xls`](../images/combineB2C-folder-result-explorer.png)
+
 ---
 
 ## 3. Two generators: merge logs, then `combineB2C_NOZIP.py`
