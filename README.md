@@ -260,4 +260,10 @@ session.set("body", body)
 
 Нужен локальный **WebTours** (в коде базовый URL `http://127.0.0.1:1080`). Сборка и запуск — через ваш SBT/Gatling-проект, как настроено в IDE.
 
+### Shell-автоматизация на Linux
+
+В каталоге [`src/test/gatlingautomation-master`](src/test/gatlingautomation-master) лежат **bash-скрипты** для сценария «Git → Gatling bundle на Linux»: `init.sh` клонирует репозиторий в `projectGit/`, `updateGatlingScripts.sh` делает `git pull` и копирует `src/test/resources` и `src/test/scala` в `user-files` установленного Gatling, `launchGatling.sh` / `stopGatling.sh` / `viewGatlingOutput.sh` управляют прогоном и логом, `collectLastResult.sh` собирает HTML-отчёты и zip с артефактами в `results/`. URL и ветка Git, пути к исходникам внутри клона и имя класса симуляции задаются в `setVars.sh`.
+
+Пошаговая установка, таблица скриптов, ограничения (не запускать от root, выбор «последнего» результата) — в **[README автоматизации](src/test/gatlingautomation-master/README.md)**.
+
 Учебный репозиторий, не продакшен-код.
