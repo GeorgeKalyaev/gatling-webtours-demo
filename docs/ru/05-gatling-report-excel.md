@@ -142,7 +142,7 @@
 Отчет1/task2/test1/test1/without_groups/ simulation.log + simulation2.log   (имена вторых файлов — по вашему правилу)
 ```
 
-### 3.2. `MergeSimulation.py` (шаги 17–21)
+### 3.2. `MergeSimulation.py` (шаги 17–24)
 
 17. В [`MergeSimulation.py`](../../tools/reporting/MergeSimulation.py) задать **`input_folder`** на каталог с двумя логами для первого слияния — **`…/test1/test1/with_groups`**. Путь указывайте **с прямыми слэшами** `/` (в том числе на Windows), например:
 
@@ -166,18 +166,25 @@
 
    ![CMD: MergeSimulation.py склеивает логи из without_groups](../images/MergeSimulation-cmd-without-groups.png)
 
-   Далее **перенесите** объединённый лог в **`…/test1/test1/without_groups/`**, **удалите** исходные **`simulation.log`** и **`simulation2.log`**, объединённый файл **переименуйте** в **`simulation_without_groups.log`** — так ожидает **`combineB2C_NOZIP.py`**.
+22. **Перенос без групп:** переместите **`общий_лог.log`** (или имя из **`output_file`**) из **`Отчет1\task2\`** в **`Отчет1\task2\test1\test1\without_groups\`** — это результат **второго** запуска `MergeSimulation.py`.
 
-### 3.3. `combineB2C_NOZIP.py`
+23. **Финал `with_groups`:** в **`…\test1\test1\with_groups\`** должен остаться **только** один файл **`simulation.log`** — это переименованный объединённый лог с группами. Если после шага 20 там ещё есть **`simulation1.log`** или лишний **`общий_лог.log`**, удалите лишнее и убедитесь, что имя итогового файла именно **`simulation.log`**.
 
-Отличие от `combineB2C.py`: **архив не распаковывается** — ожидается уже готовая папка (например `test1` с подкаталогами `with_groups` и `without_groups`).
+24. **Финал `without_groups`:** в **`…\test1\test1\without_groups\`** должен остаться **только** **`simulation_without_groups.log`** — переименуйте перенесённый на шаге 22 объединённый лог и **удалите** исходные **`simulation.log`** и **`simulation2.log`**.
 
-1. Положить скрипт на уровень **родителя** папки с логами (в примере: `Отчет1/task2/` рядом с каталогом `test1`).
-2. `python combineB2C_NOZIP.py` → имя **`.xls`** → имя папки (**без** `.zip`), например `test1`.
+### 3.3. `combineB2C_NOZIP.py` (шаги 25–27)
 
-В **`test1/test1/...`** путь в инструкции был вложенным; подставьте **то имя папки**, в которой лежат `with_groups` и `without_groups`, как вы её реально создали.
+Отличие от `combineB2C.py`: **архив не распаковывается** — читаются уже подготовленные **`with_groups/simulation.log`** и **`without_groups/simulation_without_groups.log`**.
 
-Итоговый файл содержит те же вкладки **Errors** и **Requests per min**, но по **объединённым** логам двух генераторов.
+25. Положите **[`combineB2C_NOZIP.py`](../../tools/reporting/combineB2C_NOZIP.py)** в **`Отчет1\task2\`** (рядом с каталогом **`test1`**, как на схеме выше).
+
+26. В **CMD** перейдите в **`Отчет1\task2`** и выполните **`python combineB2C_NOZIP.py`**. На запрос **«Введите имя результирующего файла:»** введите имя **без расширения** (пример на скриншоте — **`itogovii_file`** → **`itogovii_file.xls`**).
+
+   ![CMD: combineB2C_NOZIP.py — имя результирующего файла](../images/combineB2C_NOZIP-cmd-output-filename.png)
+
+27. На запрос **«Введите имя папки:»** укажите путь **относительно текущей папки** (`task2`) до каталога, внутри которого лежат **`with_groups`** и **`without_groups`**. При вложении **`test1\test1`** введите, например, **`test1\test1`** (как в скрипте — обратные слэши) или попробуйте вариант, подходящий вашему дереву; главное — чтобы существовали подпути **`…\with_groups\simulation.log`** и **`…\without_groups\simulation_without_groups.log`**.
+
+Итоговый **`.xls`** появится в **`task2`**; вкладки **Errors** и **Requests per min** — по **объединённым** логам двух генераторов.
 
 ---
 

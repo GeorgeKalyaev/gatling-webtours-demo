@@ -142,7 +142,7 @@ Report1/task2/test1/test1/with_groups/     simulation.log + simulation1.log
 Report1/task2/test1/test1/without_groups/ simulation.log + simulation2.log   (secondary names — your choice)
 ```
 
-### 3.2. `MergeSimulation.py` (steps 17–21)
+### 3.2. `MergeSimulation.py` (steps 17–24)
 
 17. In [`MergeSimulation.py`](../../tools/reporting/MergeSimulation.py), set **`input_folder`** to the folder that contains the **two logs for the first merge** — **`…/test1/test1/with_groups`**. Use **forward slashes** `/` even on Windows, e.g.:
 
@@ -166,16 +166,25 @@ Report1/task2/test1/test1/without_groups/ simulation.log + simulation2.log   (se
 
    ![CMD: MergeSimulation.py merges logs from without_groups](../images/MergeSimulation-cmd-without-groups.png)
 
-   Then **move** the merged log into **`…/test1/test1/without_groups/`**, **delete** **`simulation.log`** and **`simulation2.log`**, and **rename** the merged file to **`simulation_without_groups.log`** for **`combineB2C_NOZIP.py`**.
+22. **Move the no-group merge:** move **`общий_лог.log`** (or your **`output_file`**) from **`Report1\task2\`** into **`Report1\task2\test1\test1\without_groups\`** — this is the **second** `MergeSimulation.py` output.
 
-### 3.3. `combineB2C_NOZIP.py`
+23. **Finalize `with_groups`:** only **`simulation.log`** should remain in **`…\test1\test1\with_groups\`** — the merged with-groups log under that name. If **`simulation1.log`** or an extra merged file is still there after step 20, remove extras so the single file is **`simulation.log`**.
 
-Unlike `combineB2C.py`, this script **does not** unpack a zip — it expects an on-disk tree (e.g. folder `test1` with `with_groups` and `without_groups`).
+24. **Finalize `without_groups`:** only **`simulation_without_groups.log`** should remain in **`…\test1\test1\without_groups\`** — rename the merged file from step 22 and **delete** the original **`simulation.log`** and **`simulation2.log`**.
 
-1. Place the script next to the **parent** of that folder (example: `Report1/task2/` beside `test1`).
-2. `python combineB2C_NOZIP.py` → output **`.xls` name** → **folder name** (not `test1/test1` unless that is where the two subfolders really live).
+### 3.3. `combineB2C_NOZIP.py` (steps 25–27)
 
-The result workbook has **Errors** and **Requests per min** for the **combined** two-generator logs.
+Unlike `combineB2C.py`, this script **does not** unpack a zip — it reads **`with_groups/simulation.log`** and **`without_groups/simulation_without_groups.log`** directly.
+
+25. Place **[`combineB2C_NOZIP.py`](../../tools/reporting/combineB2C_NOZIP.py)** in **`Report1\task2\`** (next to the **`test1`** folder as in the layout above).
+
+26. In **CMD**, `cd` to **`Report1\task2`** and run **`python combineB2C_NOZIP.py`**. When prompted for the **output file name**, enter a name **without extension** (screenshot example: **`itogovii_file`** → **`itogovii_file.xls`**).
+
+   ![CMD: combineB2C_NOZIP.py — output file name](../images/combineB2C_NOZIP-cmd-output-filename.png)
+
+27. When prompted for the **folder name**, enter the path **relative to `task2`** that contains **`with_groups`** and **`without_groups`**. With nesting **`test1\test1`**, use e.g. **`test1\test1`** (backslashes as in the script) or whatever matches your tree so **`…\with_groups\simulation.log`** and **`…\without_groups\simulation_without_groups.log`** resolve.
+
+The **`.xls`** is created in **`task2`**; **Errors** and **Requests per min** reflect the **combined** two-generator logs.
 
 ---
 
