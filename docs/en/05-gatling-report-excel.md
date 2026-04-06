@@ -56,14 +56,18 @@ Continue with section 2 on the PC.
 
    ![CMD: running combineB2C.py and entering the output file name](../images/combineB2C-cmd-output-filename.png)
 
-4. At the next prompt, enter the **archive base name without `.zip`**, matching the zip in the folder (e.g. `debug-20231002164043692_full`). The script unpacks it and resolves `with_groups` / `without_groups` paths.
+4. At the next prompt (**«Введите имя папки:»**), enter the **same base name as the zip file without the `.zip` extension** — one token, **no spaces** (e.g. `debug-20231002164043692_full` for `debug-20231002164043692_full.zip`). The script unpacks it and resolves `with_groups` / `without_groups` paths.
 
-It then reads:
+While running, it reads:
 
 - `…/with_groups/simulation.log` — errors matching `error_codes_to_track`;
 - `…/without_groups/simulation_without_groups.log` — successful **REQUEST** lines for hard-coded B2C endpoints.
 
 **Sheets:** **Errors** (Error Code, Group, Endpoint, Count) and **Requests per min** (time bucket + four API columns). For **another API**, edit the `request` comparisons and column headers.
+
+5. **CMD output:** after both answers, the script prints a line like `Объединенные результаты сохранены в statistika.xls` (file name from step 3). Below is a full session with both prompts and inputs.
+
+   ![CMD: both interactive prompts for combineB2C.py](../images/combineB2C-cmd-both-prompts.png)
 
 ---
 
