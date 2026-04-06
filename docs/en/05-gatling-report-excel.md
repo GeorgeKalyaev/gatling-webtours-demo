@@ -206,13 +206,33 @@ Instead of the Excel workflow: build a Gatling **HTML summary** from **no-group*
 
    ![File manager: under `_full` — without_groups, with_groups, and svodnaia_table](../images/gatling-full-svodnaia-table-folder.png)
 
-Then copy **`without_groups/simulation_without_groups.log`** from this host into **`svodnaia_table`** (e.g. as **`simulation.log`**), copy the peer log from the other generator (`scp` or WinSCP; file names must match what your Gatling version expects for **reports-only**). Generate the report **from logs only**:
+4. On the **current** host (say “generator 2”), copy the no-group log into **`svodnaia_table`** as **`simulation.log`**:
 
 ```bash
-/path/to/gatling-charts-highcharts-bundle-3.9.5/bin/gatling.sh -nr -ro /path/to/results/debug-…_full/svodnaia_table/
+cp /home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164039914_full/without_groups/simulation_without_groups.log /home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164039914_full/svodnaia_table/simulation.log
 ```
 
-File names inside **`svodnaia_table`** must match **`-ro`** for your Gatling version (guides vary, e.g. **`simulation.log`** plus a second file). If something fails, check the Gatling docs for **`gatling.sh -ro`**.
+Adjust user, bundle path, and **`debug-…_full`** folder name.
+
+5. Copy the second log from the **other** host (“generator 1”) into the **same** **`svodnaia_table`** on generator 2 under a **different** name (below: **`simulation15.log`**; you might use **`simulation2.log`** etc. — names must **not** collide and must satisfy your Gatling **`-ro`** rules):
+
+```bash
+scp g_kalyaev@84.201.174.166:/home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164043692_full/without_groups/simulation_without_groups.log /home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164039914_full/svodnaia_table/simulation15.log
+```
+
+Replace **IP/host**, user, and **`debug-…_full`** paths (generator 1 vs 2 runs may differ, e.g. **`…39914…`** vs **`…43692…`**).
+
+   ![WinSCP: svodnaia_table with two logs (simulation.log and simulation2.log)](../images/svodnaia-table-two-logs.png)
+
+6. If **`scp`** fails (e.g. **SSH keys** or permissions), use **WinSCP** or another GUI: pull **`without_groups/simulation_without_groups.log`** from generator 1 and upload it into **`svodnaia_table`** on generator 2 under the required name.
+
+7. On generator 2, run **reports-only** on **`svodnaia_table`** so Gatling **merges** the two no-group logs into an **HTML report**:
+
+```bash
+/home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/bin/gatling.sh -nr -ro /home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164039914_full/svodnaia_table/
+```
+
+File names in **`svodnaia_table`** must match what **`gatling.sh -ro`** expects for your version. On errors, check the Gatling docs for **reports-only** / **`-ro`**.
 
 ---
 

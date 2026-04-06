@@ -206,13 +206,33 @@
 
    ![Файловый менеджер: в `_full` — without_groups, with_groups и svodnaia_table](../images/gatling-full-svodnaia-table-folder.png)
 
-Далее скопируйте в **`svodnaia_table`** лог **`without_groups/simulation_without_groups.log`** с **этого** хоста (например в **`simulation.log`**), второй такой лог — с другого генератора (`scp` или WinSCP; имена файлов согласуйте с вашей версией Gatling для **reports-only**). Затем сгенерируйте отчёт **только из логов**:
+4. С **текущего** генератора (условно «генератор-2») скопируйте лог без групп в **`svodnaia_table`** под именем **`simulation.log`**:
 
 ```bash
-/path/to/gatling-charts-highcharts-bundle-3.9.5/bin/gatling.sh -nr -ro /path/to/results/debug-…_full/svodnaia_table/
+cp /home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164039914_full/without_groups/simulation_without_groups.log /home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164039914_full/svodnaia_table/simulation.log
 ```
 
-Имена файлов в **`svodnaia_table`** должны совпадать с тем, что ожидает режим **`-ro`** для вашей версии Gatling (в разных инструкциях встречались варианты вроде **`simulation.log`** и второго файла с другим именем). При расхождении проверьте документацию Gatling по **`gatling.sh -ro`**.
+Подставьте свой пользователь, путь к bundle и имя папки **`debug-…_full`**.
+
+5. Второй лог — с **другого** генератора («генератор-1») — скопируйте в **ту же** **`svodnaia_table`** на генераторе-2 под **другим** именем (в примере ниже — **`simulation15.log`**; у вас может быть **`simulation2.log`** и т.п. — важно, чтобы имена **не совпадали** и подходили под **`-ro`** вашей версии Gatling):
+
+```bash
+scp g_kalyaev@84.201.174.166:/home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164043692_full/without_groups/simulation_without_groups.log /home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164039914_full/svodnaia_table/simulation15.log
+```
+
+Замените **IP/хост**, пользователя и пути **`debug-…_full`** на свои (на генераторе-1 и генераторе-2 папки прогона могут отличаться, как **`…39914…`** и **`…43692…`** в примере).
+
+   ![WinSCP: в svodnaia_table два лога (simulation.log и simulation2.log)](../images/svodnaia-table-two-logs.png)
+
+6. Если **`scp`** не проходит (например, из‑за **SSH-ключей** или прав), можно **WinSCP** или другой графический клиент: зайти на генератор-1, скачать **`without_groups/simulation_without_groups.log`**, загрузить его в **`svodnaia_table`** на генераторе-2 под нужным именем.
+
+7. На генераторе-2 выполните **reports-only** по папке **`svodnaia_table`** — Gatling **совместит** два лога без групп в **HTML-отчёт**:
+
+```bash
+/home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/bin/gatling.sh -nr -ro /home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/debug-20231002164039914_full/svodnaia_table/
+```
+
+Имена файлов в **`svodnaia_table`** должны совпадать с тем, что ожидает **`gatling.sh -ro`** для вашей версии. При ошибке проверьте документацию Gatling по **reports-only** / **`-ro`**.
 
 ---
 
