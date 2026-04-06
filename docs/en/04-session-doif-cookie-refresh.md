@@ -119,7 +119,6 @@ Below is the **same idea** as in your course/work notes: refresh `_Instamart_ses
 **Notes:**
 
 - The combination **`session.set("ifFailed", session.isFailed.toString)`** and **`as[Boolean]`** is again visible — see [section 1 above](#section-doif-boolean): prefer storing a **Boolean** or **`doIf(_.isFailed)`**.
-- Lines with **`appendAll(session("id_polizovat…`** and **`as[S session`** were **truncated** in the PDF/screenshot. Below they are **completed to valid Scala** (session key assumed `id_polizovatelya`); rename if your feeder column differs.
 
 ```scala
 package UpdateCookie.UpdateCookies
@@ -144,7 +143,7 @@ class CSVUsersUpdateCookie {
     .doIf(session => session("ifFailed").as[Boolean]) {
       exec { session =>
         scala.reflect.io.File("OldCookie_Need_Again_b2b_21_12_2023.csv")
-          .appendAll(session("id_polizovatelya").as[String]) // source had truncated "id_polizovat session"
+          .appendAll(session("id_polizovatelya").as[String])
         session
       }
     }
@@ -165,7 +164,7 @@ class CSVUsersUpdateCookie {
     .doIf(session => !session("ifFailed").as[Boolean]) {
       exec { session =>
         scala.reflect.io.File("NewCokies_b2b_21_12_2023.csv")
-          .appendAll(session("id_polizovatelya").as[String]) // source had truncated "as[S session"
+          .appendAll(session("id_polizovatelya").as[String])
         session
       }
     }

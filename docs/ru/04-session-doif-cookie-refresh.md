@@ -119,7 +119,6 @@ scenario("Обновление session cookie")
 **Важно:**
 
 - Здесь снова видно сочетание **`session.set("ifFailed", session.isFailed.toString)`** и **`as[Boolean]`** — см. [раздел 1 выше](#section-doif-boolean): для корректной работы лучше класть **`Boolean`** или использовать **`doIf(_.isFailed)`**.
-- В PDF/скриншотах строки с **`appendAll(session("id_polizovat…`** и **`as[S session`** были **обрезаны**. В коде ниже они **дописаны до валидного Scala** (предполагается ключ сессии `id_polizovatelya`); если у вас другое имя колонки фидера — замените.
 
 ```scala
 package UpdateCookie.UpdateCookies
@@ -144,7 +143,7 @@ class CSVUsersUpdateCookie {
     .doIf(session => session("ifFailed").as[Boolean]) {
       exec { session =>
         scala.reflect.io.File("OldCookie_Need_Again_b2b_21_12_2023.csv")
-          .appendAll(session("id_polizovatelya").as[String]) // было: обрыв «id_polizovat session»
+          .appendAll(session("id_polizovatelya").as[String])
         session
       }
     }
@@ -165,7 +164,7 @@ class CSVUsersUpdateCookie {
     .doIf(session => !session("ifFailed").as[Boolean]) {
       exec { session =>
         scala.reflect.io.File("NewCokies_b2b_21_12_2023.csv")
-          .appendAll(session("id_polizovatelya").as[String]) // было: обрыв «as[S session»
+          .appendAll(session("id_polizovatelya").as[String])
         session
       }
     }
