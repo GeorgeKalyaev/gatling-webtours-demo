@@ -162,7 +162,11 @@ Report1/task2/test1/test1/without_groups/ simulation.log + simulation2.log   (se
 
    ![Explorer: with_groups after moving the merged log (before cleanup and rename)](../images/MergeSimulation-merged-log-moved-to-with-groups.png)
 
-21. **`without_groups`:** set **`input_folder`** to **`…/test1/test1/without_groups`**, adjust **`output_file`** if needed, run **`python MergeSimulation.py`** from **`task2`** again (the new merged file lands in **`task2`** again — move it into **`without_groups`**), remove the two source logs, and rename the merged file to **`simulation_without_groups.log`** (as expected by `combineB2C_NOZIP.py`).
+21. **Same for `without_groups`:** in [`MergeSimulation.py`](../../tools/reporting/MergeSimulation.py), set **`input_folder`** to **`…/test1/test1/without_groups`** (forward slashes `/`, e.g. `C:/Users/…/Report1/task2/test1/test1/without_groups`). Make sure **`task2`** does not still contain a merged file with the same **`output_file`** name, or pick another **`output_file`** so you do not overwrite the wrong artifact. From **`task2`**, run **`python MergeSimulation.py`** — it merges **`simulation.log`** and **`simulation2.log`**, writing the merged file into **`task2`** (example: **`общий_лог.log`**).
+
+   ![CMD: MergeSimulation.py merges logs from without_groups](../images/MergeSimulation-cmd-without-groups.png)
+
+   Then **move** the merged log into **`…/test1/test1/without_groups/`**, **delete** **`simulation.log`** and **`simulation2.log`**, and **rename** the merged file to **`simulation_without_groups.log`** for **`combineB2C_NOZIP.py`**.
 
 ### 3.3. `combineB2C_NOZIP.py`
 
