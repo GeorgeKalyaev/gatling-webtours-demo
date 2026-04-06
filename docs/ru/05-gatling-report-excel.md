@@ -172,7 +172,7 @@
 
 24. **Финал `without_groups`:** в **`…\test1\test1\without_groups\`** должен остаться **только** **`simulation_without_groups.log`** — переименуйте перенесённый на шаге 22 объединённый лог и **удалите** исходные **`simulation.log`** и **`simulation2.log`**.
 
-### 3.3. `combineB2C_NOZIP.py` (шаги 25–28)
+### 3.3. `combineB2C_NOZIP.py` (шаги 25–29)
 
 Отличие от `combineB2C.py`: **архив не распаковывается** — читаются уже подготовленные **`with_groups/simulation.log`** и **`without_groups/simulation_without_groups.log`**.
 
@@ -188,7 +188,9 @@
 
    ![Проводник: Отчет1\task2 — itogovii_file.xls рядом с combineB2C_NOZIP.py](../images/combineB2C_NOZIP-folder-result-task2.png)
 
-Вкладки **Errors** и **Requests per min** в этой книге — по **объединённым** логам **двух генераторов** (см. раздел 2, шаги 8–9).
+29. Откройте **`itogovii_file.xls`**: на вкладках **Errors** и **Requests per min** видна **совмещённая статистика с двух генераторов** (те же колонки, что в разделе 2, шаги 8–9).
+
+   ![Excel: itogovii_file.xls — вкладки Errors и Requests per min (два генератора)](../images/combineB2C_NOZIP-xls-errors-and-rpm.png)
 
 ---
 
