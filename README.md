@@ -36,8 +36,6 @@ A load-test style scenario for the **HP WebTours** demo app: HTTP steps, respons
 
 ### Project structure (“script tree”)
 
-Slides and PDFs often mix **numbered bullets** with full IDE screenshots. In a GitHub README it is usually clearer to use a **text directory tree**, short prose, and **fenced code** for the fragments that matter. You do not have to crop screenshots to “code only”—repeat the important snippets in markdown instead; they stay searchable and match the branch.
-
 #### Layout of this repo (`src/test`)
 
 ```text
@@ -84,7 +82,7 @@ The same file defines `object FeederGlobe` with `csv("SomeFile.csv").circular` l
 
 #### `Simulation` entry — `Debug` and load profile
 
-[`Debug.scala`](src/test/scala/NewScripts/Debug.scala) extends `Simulation` and runs `setUp(...)`. [`VariablesOfCycles`](src/test/scala/NewScripts/Debug.scala) (same file) holds scenario tuning constants (here `CityCount`). A full profile often adds per-UC intensity coefficients and `inject(rampUsersPerSec(...), constantUsersPerSec(...))` as in course materials; this repository keeps a minimal `atOnceUsers(1)` example plus proxy.
+[`Debug.scala`](src/test/scala/NewScripts/Debug.scala) extends `Simulation` and runs `setUp(...)`. [`VariablesOfCycles`](src/test/scala/NewScripts/Debug.scala) (same file) holds scenario tuning constants (here `CityCount`). A full profile often adds per-UC intensity coefficients and `inject(rampUsersPerSec(...), constantUsersPerSec(...))`; this repository keeps a minimal `atOnceUsers(1)` example plus proxy.
 
 ---
 
@@ -444,8 +442,6 @@ collect...     →  reports + zip in results/
 
 ### Структура проекта («дерево скриптов»)
 
-В презентациях и PDF часто идут **нумерованные пункты** вместе со скриншотами IDE. В README на GitHub обычно удобнее **дерево каталогов в тексте**, короткие пояснения и **код в блоках** — не нужно «вырезать» со скрина только код: важные фрагменты дублируют в markdown; так проще искать и версия всегда совпадает с веткой.
-
 #### Этот репозиторий (`src/test`)
 
 ```text
@@ -492,7 +488,7 @@ src/test/
 
 #### Точка входа `Simulation` — `Debug` и профиль нагрузки
 
-[`Debug.scala`](src/test/scala/NewScripts/Debug.scala) расширяет `Simulation` и задаёт `setUp(...)`. Объект [`VariablesOfCycles`](src/test/scala/NewScripts/Debug.scala) в том же файле — константы настройки сценария (здесь `CityCount`). В полноценном профиле часто добавляют коэффициенты интенсивности по UC и `inject(rampUsersPerSec(...), constantUsersPerSec(...))`, как в учебных материалах; здесь оставлен минимальный пример `atOnceUsers(1)` и прокси.
+[`Debug.scala`](src/test/scala/NewScripts/Debug.scala) расширяет `Simulation` и задаёт `setUp(...)`. Объект [`VariablesOfCycles`](src/test/scala/NewScripts/Debug.scala) в том же файле — константы настройки сценария (здесь `CityCount`). В полноценном профиле часто добавляют коэффициенты интенсивности по UC и `inject(rampUsersPerSec(...), constantUsersPerSec(...))`; здесь оставлен минимальный пример `atOnceUsers(1)` и прокси.
 
 ---
 
