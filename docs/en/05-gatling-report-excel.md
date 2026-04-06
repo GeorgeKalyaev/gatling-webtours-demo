@@ -8,6 +8,8 @@ This page summarizes a practical workflow: on **Linux**, package a **`<run>_full
 
 ---
 
+<a id="section-1-reportszip"></a>
+
 ## 1. Single generator: `reportsZip.sh`
 
 The script is **interactive**. Run it on the host where the **Gatling bundle** lives (example: `gatling-charts-highcharts-bundle-3.9.5`) and **`results/`** contains the run folder (e.g. `debug-20231002164043692` with `simulation.log`).
@@ -87,7 +89,24 @@ While running, it reads:
 
 ## 3. Two generators: merge logs, then `combineB2C_NOZIP.py`
 
-Run **section 1** on **each** generator, download both **`…_full.zip`** archives, lay out logs on the PC, **merge** pairs, rename for `combineB2C_NOZIP.py`, then produce one `.xls`.
+Build **`…_full.zip` on each** of the two generators ([§3.0](#section-3-0-reportszip)), **download both** archives, lay out logs on the PC, **merge** pairs, rename for `combineB2C_NOZIP.py`, then produce one `.xls`.
+
+<a id="section-3-0-reportszip"></a>
+
+### 3.0. On each generator: `reportsZip.sh` (error table from two hosts)
+
+To merge statistics later, run the packaging steps **on every generator** (same flow as [section 1](#section-1-reportszip); the run folder name `debug-…` will be **different** on the second host).
+
+1. Place **`reportsZip.sh`** next to **`gatling-charts-highcharts-bundle-3.9.5`** (see the screenshot in section 1).
+2. Run e.g. `/home/g_kalyaev/reportsZip.sh` or `sh /home/g_kalyaev/reportsZip.sh`.
+3. Gatling root path: `/home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5`.
+4. Results path: `/home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5/results/`.
+5. On **this** generator, enter the folder name that contains **`simulation.log`** (example: `debug-20231002164043692` — on the other generator use **its** folder for the paired run).
+6. Under **`…/results/`** you get a **`<name>_full` directory** and **`<name>_full.zip`**. The screenshot shows another run id (`debug-20231002164039914`); your names match step 5.
+
+   ![results: `_full` folder and zip after reportsZip.sh (one generator example)](../images/reportsZip-results-two-generators-step6.png)
+
+Repeat steps **1–6 on the second generator**, then download **both** `…_full.zip` files to your PC.
 
 ### 3.1. Example folder layout
 
