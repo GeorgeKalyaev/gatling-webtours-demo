@@ -73,6 +73,12 @@ While running, it reads:
 
    ![File Explorer: script, zip, extracted `_full` folder, and `statistika.xls`](../images/combineB2C-folder-result-explorer.png)
 
+7. Open the generated **Excel** file (e.g. `statistika.xls`) and confirm the sheets contain data.
+
+8. The **Errors** sheet shows **error statistics for the whole run**: **Error Code**, **Group**, **Endpoint**, and **Count** — log error text, Gatling group, endpoint, and how often it occurred. The **Requests per min** sheet holds per-minute successful-request counts (column layout described above).
+
+   ![Excel, Errors sheet: error statistics for the full test](../images/combineB2C-xls-errors-sheet.png)
+
 ---
 
 ## 3. Two generators: merge logs, then `combineB2C_NOZIP.py`
