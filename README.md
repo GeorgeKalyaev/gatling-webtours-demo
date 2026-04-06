@@ -1,12 +1,27 @@
 # gatling-webtours-demo
 
-Учебный сценарий на **Gatling** для демо-приложения **HP WebTours**: HTTP-шаги, проверки ответов, сессия, фидеры, генерация данных и динамическое тело запроса.
+Учебный материал по **Gatling**: сценарий для **HP WebTours** и отдельно **bash-автоматизация под Linux** (Git + официальный Gatling bundle, прогон, отчёты).
 
 **Репозиторий:** [github.com/GeorgeKalyaev/gatling-webtours-demo](https://github.com/GeorgeKalyaev/gatling-webtours-demo)
 
 ---
 
-## Структура кода
+## Оглавление
+
+| Раздел | О чём |
+|--------|--------|
+| **[1. Сценарий WebTours (Gatling)](#1-webtours)** | Код симуляции, проверки ответов, сессия, JSON, Fiddler, logback, прокси |
+| **[2. Shell-автоматизация (Linux)](#2-shell)** | Скрипты в `src/test/gatlingautomation-master`, установка, `setVars.sh`, отчёты |
+
+---
+
+<a id="1-webtours"></a>
+
+## 1. Сценарий WebTours (Gatling)
+
+Нагрузочный сценарий для демо-приложения **HP WebTours**: HTTP-шаги, проверки ответов, сессия, фидеры, генерация данных и динамическое тело запроса.
+
+### Структура кода
 
 - `NewScripts.WebTours.WebToursAction` — описание запросов и `check`.
 - `NewScripts.WebTours.WebTours` (сценарий в `WebToursCommonScenario.scala`) — группы шагов, фидеры, генерация данных в сессии.
@@ -15,9 +30,9 @@
 
 ---
 
-## Проверки ответов (`check`)
+### Проверки ответов (`check`)
 
-### Корреляция: `userSession` из HTML
+#### Корреляция: `userSession` из HTML
 
 После открытия домашней страницы из ответа вытаскивается скрытое поле `userSession` и сохраняется в сессию для логина.
 
@@ -25,7 +40,7 @@
 .check(regex(""""userSession" value="(.*?)"""").saveAs("userSession"))
 ```
 
-### После логина: имя в HTML и допустимый статус
+#### После логина: имя в HTML и допустимый статус
 
 Проверяется, что в ответе есть имя пользователя из сессии, и статус — 200 или 302.
 
@@ -34,7 +49,7 @@
 .check(status.in(302, 200))
 ```
 
-### Список городов из разметки (все совпадения)
+#### Список городов из разметки (все совпадения)
 
 С страницы выбора рейса собираются все `option value="..."` в список `CityFromResponse`. В текущем сценарии для полёта дальше используются города из фидера — отдельный учебный блок про уникальность.
 
@@ -44,7 +59,7 @@
 
 ---
 
-## Сессия и обход при ошибках
+### Сессия и обход при ошибках
 
 Иллюстрация: сохранение признака ошибки, сброс состояния сессии как успешной, обязательный шаг с корреляцией и выход из сценария при провале.
 
@@ -58,7 +73,7 @@
 
 ---
 
-## Уникальные значения из фидера
+### Уникальные значения из фидера
 
 Цикл `doWhile` + `feed`: набираем в сессии `Seq` из **уникальных** городов (количество задаётся в `NewScripts.VariablesOfCycles.CityCount`), затем первый и второй элементы кладутся в `selectedCityDepart` / `selectedCityArrive`.
 
@@ -76,7 +91,7 @@
 
 ---
 
-## Время и даты в сессии
+### Время и даты в сессии
 
 **Unix time (мс)** — в сессию `unixTimestamp` (плюс вывод в консоль для отладки).
 
@@ -102,7 +117,7 @@ exec { session =>
 
 ---
 
-## UUID без дефисов
+### UUID без дефисов
 
 Генерация строки, удаление `-`, укорочение до 21 символа, сохранение в `UUID_RND`.
 
@@ -113,7 +128,7 @@ session.set("UUID_RND", UUID_RND)
 
 ---
 
-## URL encoding
+### URL encoding
 
 Случайная строка из списка кодируется `URLEncoder.encode(..., "UTF-8")`; оригинал и закодированный вариант сохраняются в сессии.
 
@@ -128,7 +143,7 @@ session
 
 ---
 
-## Случайный `queryParam`
+### Случайный `queryParam`
 
 В сессию пишется `itinerary` или `search`, затем значение подставляется в параметр `page` функцией от `session`.
 
@@ -141,7 +156,7 @@ session
 
 ---
 
-## JSON переменного размера и подстановка в body
+### JSON переменного размера и подстановка в body
 
 1. Случайное число элементов **от 1 до 5**, индексы без повторов, поля из заранее заданных массивов.
 2. Случайные хвосты для `lon` / `lat`.
@@ -167,7 +182,7 @@ session.set("body", body)
 
 Для WebTours это **демонстрационный** запрос: сервер отвечает HTML, зато в прокси (Fiddler и т.п.) видно сформированный JSON и его изменение от прогона к прогону.
 
-### Как выглядит итоговый JSON
+#### Как выглядит итоговый JSON
 
 Строка в сессии `body` — один JSON-объект. Поле **`items`** — массив объектов; длина массива **от 1 до 5** (случайно, без повторяющихся `id` в одном запросе). У **`location`** координаты **`lon`** / **`lat`** — числа с «хвостом» из `Random` (в коде конкатенация `92.556` + `randomLon` и `67.14` + `randomLat`). **`retailer_id`** в теле — строка `"610"`, как в `s"""..."""`.
 
@@ -222,7 +237,7 @@ session.set("body", body)
 
 В реальном прогоне порядок элементов в `items` и набор `id` зависят от `Random.shuffle` и `take(numBlocks)`; числа в `location` будут другими при других случайных суффиксах.
 
-### Скриншоты Fiddler (инспектор JSON)
+#### Скриншоты Fiddler (инспектор JSON)
 
 Так выглядит сгенерированное тело запроса в **Fiddler Classic** при прогоне через прокси (`Debug.scala`): вкладка **JSON** для запроса к `127.0.0.1:1080/cgi-bin/welcome.pl?page=search`.
 
@@ -236,13 +251,13 @@ session.set("body", body)
 
 ---
 
-## Отладка HTTP
+### Отладка HTTP
 
 В `logback-test.xml` для логгера `io.gatling.http.engine.response` задан уровень **DEBUG** с выводом в файл `debug-<timestamp>.log` — удобно сопоставлять с перехваченным трафиком.
 
 ---
 
-## Прокси в `Debug.scala`
+### Прокси в `Debug.scala`
 
 Симуляция `NewScripts.Debug` задаёт прокси `127.0.0.1:8882` для записи трафика (например, Fiddler).
 
@@ -256,14 +271,83 @@ session.set("body", body)
 
 ---
 
-## Запуск
+### Запуск сценария WebTours
 
-Нужен локальный **WebTours** (в коде базовый URL `http://127.0.0.1:1080`). Сборка и запуск — через ваш SBT/Gatling-проект, как настроено в IDE.
+Нужен локальный **WebTours** (в коде базовый URL `http://127.0.0.1:1080`). Сборка и запуск — через ваш **SBT / Gatling** в IDE (структура проекта под вашу среду).
 
-### Shell-автоматизация на Linux
+---
 
-В каталоге [`src/test/gatlingautomation-master`](src/test/gatlingautomation-master) лежат **bash-скрипты** для сценария «Git → Gatling bundle на Linux»: `init.sh` клонирует репозиторий в `projectGit/`, `updateGatlingScripts.sh` делает `git pull` и копирует `src/test/resources` и `src/test/scala` в `user-files` установленного Gatling, `launchGatling.sh` / `stopGatling.sh` / `viewGatlingOutput.sh` управляют прогоном и логом, `collectLastResult.sh` собирает HTML-отчёты и zip с артефактами в `results/`. URL и ветка Git, пути к исходникам внутри клона и имя класса симуляции задаются в `setVars.sh`.
+<a id="2-shell"></a>
 
-Пошаговая установка, таблица скриптов, ограничения (не запускать от root, выбор «последнего» результата) — в **[README автоматизации](src/test/gatlingautomation-master/README.md)**.
+## 2. Shell-автоматизация (Linux)
+
+> **Файлы в репозитории:** [`src/test/gatlingautomation-master/`](src/test/gatlingautomation-master) — все `.sh` и [`setVars.sh`](src/test/gatlingautomation-master/setVars.sh). Для работы на машине их копируют в **домашний каталог** пользователя (см. установку ниже).
+
+Набор **bash**-скриптов для **Linux**: из **Git** подтягиваются сценарии и ресурсы, копируются в **официальный Gatling bundle** (`gatling/user-files`), запускается симуляция, собираются отчёты и zip с артефактами.
+
+**Связь с Git:** `init.sh` делает **`git clone`** в `./projectGit/` (ветка `GIT_BRANCH`). `updateGatlingScripts.sh` выполняет **`git pull`** и снова копирует файлы из путей `PROJECTGIT_RESOURCES_PATH` и `PROJECTGIT_SCRIPTS_PATH` в `gatling/user-files/`. Адрес репозитория — в `setVars.sh` (**GitHub**, **GitLab** или другой HTTPS remote).
+
+---
+
+### 2.1. Установка
+
+1. Скопировать **все** `.sh` из `gatlingautomation-master` в **домашний каталог** пользователя (там появятся `gatling/`, `results/`, `projectGit/`).
+2. Отредактировать **`setVars.sh`**:
+   - `GIT_BRANCH`, `GIT_URL`, при необходимости `GIT_USER` / `GIT_PASS`;
+   - `USE_GIT_LOGPASS` — вшивать ли логин/пароль в URL при `clone`/`pull` (для публичного репозитория обычно `false`);
+   - `GATLING_MAINFILE` — класс симуляции, формат `пакет.ИмяКласса` (например `NewScripts.Debug`);
+   - **`PROJECTGIT_RESOURCES_PATH`** и **`PROJECTGIT_SCRIPTS_PATH`** — пути **от корня клона** до `src/test/resources` и `src/test/scala` (в шаблоне задано под этот репозиторий: `./projectGit/src/test/...`).
+3. Запуск преднастройки: `sh init.sh`
+4. При необходимости — **sudo** (установка `git`, `zip`), **учётные данные Git** (если репозиторий приватный или `USE_GIT_LOGPASS=false`).
+5. Распаковать **Gatling bundle** (в подсказке `init.sh` — пример `gatling-charts-highcharts-bundle-3.9.5`) в каталог **`gatling/`**, чтобы существовал `./gatling/bin/gatling.sh`.
+6. Права на запуск: `chmod +x ./gatling/bin/gatling.sh` (или `chmod 777`, если так принято в окружении).
+
+**Не запускать скрипты от root** — иначе съедут владельцы файлов в `gatling/` и `projectGit/`.
+
+---
+
+### 2.2. Описание скриптов
+
+| Скрипт | Назначение |
+|--------|------------|
+| **`init.sh`** | Каталоги `gatling`, `gatling/output`, `results`, `projectGit`; при отсутствии — `apt-get install git zip`; **`git clone`** в `./projectGit/`. |
+| **`updateGatlingScripts.sh`** | При смене ветки — `git checkout`, затем **`git pull`**; очистка `gatling/user-files/resources` и `simulations`; копирование ресурсов и Scala из путей из `setVars.sh`. |
+| **`launchGatling.sh`** | `nohup` + `gatling.sh -bm -rm local -s $GATLING_MAINFILE`, лог в `gatling/output/<timestamp>-g.out`, затем вызов просмотра лога. |
+| **`viewGatlingOutput.sh`** | `tail -f` последнего файла в `gatling/output/`. Выход: **Ctrl+C** (только просмотр, не останавливает Gatling). |
+| **`stopGatling.sh`** | `pgrep -f gatling` и `kill -9`. |
+| **`collectLastResult.sh`** | Последняя по имени папка в `gatling/results/`, HTML с группами и вариант **без групп**, копия `user-files`, zip в **`./results/<имя>_full.zip`**. |
+| **`deleteAllResultsAndLogs.sh`** | Удаление логов и содержимого `output/` и `results/` (в текущей версии **без** интерактивного подтверждения). |
+
+#### Важно для `collectLastResult.sh`
+
+Выбор «последнего» результата — через `ls | tail -n 1`. Вызывать **после первого успешного прогона**. Не переименовывать и не плодить вручную каталоги в `gatling/results/`, если полагаетесь на автоматику.
+
+---
+
+### 2.3. Возможные проблемы
+
+1. Запуск **от root** — портятся права; работать от обычного пользователя.
+2. Файлы с владельцем root — `chown`/`chmod` или заново развернуть bundle и повторить шаги от пользователя.
+3. Пути в **`setVars.sh`** должны совпадать со структурой **вашего** клона; при смене репозитория обновить `PROJECTGIT_*` и `GATLING_MAINFILE`.
+
+---
+
+### 2.4. Схема потока
+
+```text
+setVars.sh     →  URL, ветка, пути к scala/resources внутри projectGit/
+      ↓
+init.sh        →  clone в projectGit/ + каталоги gatling, results
+      ↓
+(вручную)      →  Gatling bundle в gatling/
+      ↓
+update...      →  pull + копирование в gatling/user-files/
+      ↓
+launch...      →  прогон + tail лога
+      ↓
+collect...     →  отчёты + zip в results/
+```
+
+---
 
 Учебный репозиторий, не продакшен-код.
