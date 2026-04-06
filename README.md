@@ -36,6 +36,21 @@ A load-test style scenario for the **HP WebTours** demo app: HTTP steps, respons
 
 ### Project structure (“script tree”)
 
+**Gatling project components (overview)**
+
+**Contents**
+
+| Section | Topics |
+|--------|--------|
+| **[Repository tree](#en-structure-layout)** | `src/test` layout: `resources`, `scala/NewScripts`, `gatlingautomation-master` |
+| **[Folder roles](#en-structure-roles)** | Feeders/config vs `Simulation` / scenarios |
+| **[Large-suite pattern](#en-structure-pattern)** | `*Action`, `*CommonScenario`, `*Feeder` per business flow |
+| **[Shared `Protocols`](#en-structure-protocols)** | `HttpProtocolBuilder`, `baseUrl`, default checks |
+| **[Shared `FeederGlobe`](#en-structure-feederglobe)** | Central `csv(...)` pools under `resources/` |
+| **[`Simulation` entry (`Debug`)](#en-structure-simulation)** | `setUp`, `VariablesOfCycles`, `inject` |
+
+<a id="en-structure-layout"></a>
+
 #### Layout of this repo (`src/test`)
 
 ```text
@@ -55,10 +70,14 @@ src/test/
 └── gatlingautomation-master/       ← Linux shell automation (see §2)
 ```
 
+<a id="en-structure-roles"></a>
+
 #### What lives where
 
 - **`resources/`** — CSV feeders (“pools”), `gatling.conf`, `logback-test.xml`. Gatling resolves feeder file names relative to this folder.
 - **`scala/...`** — `Simulation` subclasses and scenarios. In SBT projects this is typically under `src/test/scala` (Gatling bundle: `user-files/simulations`).
+
+<a id="en-structure-pattern"></a>
 
 #### Pattern common in large suites (many use cases)
 
@@ -72,13 +91,19 @@ Teams often add **one package per business flow** (e.g. `UC26_...`) with three r
 
 Cross-cutting pieces are placed at package level, similar to this repo’s **`Debug`** (simulation entry), **`Protocols`** (HTTP defaults), and **`FeederGlobe`** (shared CSV feeders).
 
+<a id="en-structure-protocols"></a>
+
 #### Shared HTTP defaults — `Protocols`
 
 [`HttpSberMarket.scala`](src/test/scala/NewScripts/HttpSberMarket.scala) defines `package object Protocols` with one or more `HttpProtocolBuilder` values (`baseUrl`, headers, global `check(status.in(...))`). That is the “single place for environment-specific HTTP” pattern from larger Gatling codebases (Web / B2B / API variants in one object).
 
+<a id="en-structure-feederglobe"></a>
+
 #### Shared data pools — `FeederGlobe`
 
 The same file defines `object FeederGlobe` with `csv("SomeFile.csv").circular` lines. Those files are expected under `resources/`. **This demo repo** lists several names as **templates** without committing every CSV; in a full project the names match real pool files.
+
+<a id="en-structure-simulation"></a>
 
 #### `Simulation` entry — `Debug` and load profile
 
@@ -442,6 +467,21 @@ collect...     →  reports + zip in results/
 
 ### Структура проекта («дерево скриптов»)
 
+**Описание составляющей части проекта (Gatling)**
+
+**Оглавление**
+
+| Раздел | О чём |
+|--------|--------|
+| **[Дерево `src/test`](#ru-structure-layout)** | `resources`, `scala/NewScripts`, `gatlingautomation-master` |
+| **[Роли каталогов](#ru-structure-roles)** | Пулы/конфиг vs симуляции и сценарии |
+| **[Паттерн крупного проекта](#ru-structure-pattern)** | `*Action`, `*CommonScenario`, `*Feeder` на бизнес-поток |
+| **[Общие `Protocols`](#ru-structure-protocols)** | `HttpProtocolBuilder`, `baseUrl`, общие проверки |
+| **[Общий `FeederGlobe`](#ru-structure-feederglobe)** | Централизованные `csv(...)` из `resources/` |
+| **[Точка входа `Simulation` (`Debug`)](#ru-structure-simulation)** | `setUp`, `VariablesOfCycles`, `inject` |
+
+<a id="ru-structure-layout"></a>
+
 #### Этот репозиторий (`src/test`)
 
 ```text
@@ -461,10 +501,14 @@ src/test/
 └── gatlingautomation-master/       ← shell-автоматизация Linux (см. §2)
 ```
 
+<a id="ru-structure-roles"></a>
+
 #### Роли каталогов
 
 - **`resources/`** — CSV-фидеры («пулы»), `gatling.conf`, `logback-test.xml`. Имена файлов для `csv(...)` резолвятся относительно этой папки.
 - **`scala/...`** — классы `Simulation` и сценарии. В SBT это обычно `src/test/scala`; в bundle Gatling — `user-files/simulations`.
+
+<a id="ru-structure-pattern"></a>
 
 #### Типичный паттерн в крупных проектах (много UC)
 
@@ -478,13 +522,19 @@ src/test/
 
 Общие вещи выносят на уровень пакета — как здесь **`Debug`** (точка входа симуляции), **`Protocols`** (HTTP по умолчанию) и **`FeederGlobe`** (общие CSV).
 
+<a id="ru-structure-protocols"></a>
+
 #### Общие HTTP-настройки — `Protocols`
 
 В [`HttpSberMarket.scala`](src/test/scala/NewScripts/HttpSberMarket.scala) объявлен `package object Protocols` с одним или несколькими `HttpProtocolBuilder` (`baseUrl`, заголовки, общий `check(status.in(...))`). Это приём «одно место для окружений» из больших наборов сценариев (Web / B2B / API и т.д.).
 
+<a id="ru-structure-feederglobe"></a>
+
 #### Общие пулы — `FeederGlobe`
 
 В том же файле — `object FeederGlobe` с строками вида `csv("Имя.csv").circular`. Файлы ожидаются в **`resources/`**. В **этом демо-репозитории** часть имён задана как **шаблон** без всех CSV в Git; в боевом проекте имена совпадают с реальными пулами.
+
+<a id="ru-structure-simulation"></a>
 
 #### Точка входа `Simulation` — `Debug` и профиль нагрузки
 
