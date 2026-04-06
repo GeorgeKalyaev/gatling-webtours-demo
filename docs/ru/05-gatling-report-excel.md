@@ -42,18 +42,23 @@
 
 **ОС:** ориентир — **Windows** (в коде пути к логам заданы через `\\`).
 
-**Зависимости:** Python 3, пакеты из [`tools/reporting/requirements.txt`](../../tools/reporting/requirements.txt):
+1. Создать папку с любым именем и положить в неё **скачанный ранее архив** **`…_full.zip`** и скрипт **`combineB2C.py`** (из [`tools/reporting/`](../../tools/reporting/) репозитория или вашей копии).
 
-```text
-pip install -r tools/reporting/requirements.txt
-```
+2. В **CMD** перейти в эту папку и запустить: `python combineB2C.py`. Нужны установленные **Python 3** и библиотеки **`xlwt`** и **`pandas`**:
 
-1. В одну папку положить **`combineB2C.py`** и файл **`…_full.zip`** (имя без `.zip` совпадает с именем папки внутри архива после распаковки).
-2. Запуск: `python combineB2C.py`.
-3. Имя результирующего файла **без расширения** (например `statistika` → `statistika.xls`).
-4. Имя **папки/архива без `.zip`** — то же, что у zip (например `debug-20231002164043692_full`).
+   ```text
+   pip install xlwt pandas
+   ```
 
-Скрипт распаковывает zip, читает:
+   Либо одной командой из корня репозитория: `pip install -r tools/reporting/requirements.txt` (см. [`requirements.txt`](../../tools/reporting/requirements.txt)).
+
+3. На запрос **«Введите имя результирующего файла:»** ввести имя **без расширения** (в примере ниже — `statistika`, на выходе будет `statistika.xls`).
+
+   ![CMD: запуск combineB2C.py и ввод имени результирующего файла](../images/combineB2C-cmd-output-filename.png)
+
+4. На следующий запрос ввести **имя архива без `.zip`** — как у файла в этой папке (например `debug-20231002164043692_full`). Скрипт распакует zip и подставит пути к `with_groups` / `without_groups`.
+
+Дальше скрипт читает:
 
 - `…/with_groups/simulation.log` — ошибки по кодам из списка `error_codes_to_track`;
 - `…/without_groups/simulation_without_groups.log` — успешные **REQUEST** по зашитым эндпоинтам B2C (приложение/веб completion, отмены).

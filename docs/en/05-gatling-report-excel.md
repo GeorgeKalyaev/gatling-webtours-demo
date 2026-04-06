@@ -42,18 +42,23 @@ Continue with section 2 on the PC.
 
 **OS:** intended for **Windows** (log subpaths use `\\`).
 
-**Dependencies:** Python 3 and packages from [`tools/reporting/requirements.txt`](../../tools/reporting/requirements.txt):
+1. Create a folder, put the downloaded **`…_full.zip`** archive and **`combineB2C.py`** inside (from [`tools/reporting/`](../../tools/reporting/) in the repo or your own copy).
 
-```text
-pip install -r tools/reporting/requirements.txt
-```
+2. In **CMD**, `cd` to that folder and run: `python combineB2C.py`. You need **Python 3** plus **`xlwt`** and **`pandas`**:
 
-1. Put **`combineB2C.py`** and **`…_full.zip`** in one folder (the name without `.zip` matches the folder produced when unpacking).
-2. Run: `python combineB2C.py`.
-3. Result file name **without extension** (e.g. `statistika` → `statistika.xls`).
-4. **Folder / archive base name without `.zip`** — same as the zip (e.g. `debug-20231002164043692_full`).
+   ```text
+   pip install xlwt pandas
+   ```
 
-The script unpacks the zip and reads:
+   Or from the repo root: `pip install -r tools/reporting/requirements.txt` — see [`requirements.txt`](../../tools/reporting/requirements.txt).
+
+3. When prompted for the **output file name** (Russian prompt: «Введите имя результирующего файла:»), enter a name **without extension** (example below: `statistika` → `statistika.xls`).
+
+   ![CMD: running combineB2C.py and entering the output file name](../images/combineB2C-cmd-output-filename.png)
+
+4. At the next prompt, enter the **archive base name without `.zip`**, matching the zip in the folder (e.g. `debug-20231002164043692_full`). The script unpacks it and resolves `with_groups` / `without_groups` paths.
+
+It then reads:
 
 - `…/with_groups/simulation.log` — errors matching `error_codes_to_track`;
 - `…/without_groups/simulation_without_groups.log` — successful **REQUEST** lines for hard-coded B2C endpoints.
