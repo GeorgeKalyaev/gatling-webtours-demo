@@ -108,7 +108,7 @@ To merge statistics later, run the packaging steps **on every generator** (same 
 
 Repeat steps **1–6 on the second generator**, then download **both** `…_full.zip` files to your PC.
 
-### 3.1. Inside `_full`, download logs, PC folder layout (steps 7–15)
+### 3.1. Inside `_full`, download logs, PC folder layout (steps 7–16)
 
 7. Under each **`debug-…_full`** directory (from the zip or on the host) you have **`without_groups`** and **`with_groups`**; each contains its own **`simulation.log`** (with and without Gatling groups).
 
@@ -129,6 +129,10 @@ Repeat steps **1–6 on the second generator**, then download **both** `…_full
 15. **`with_groups`** should look like this: two log files side by side (**`simulation.log`** and **`simulation1.log`** in the example).
 
    ![Explorer: Report1\task2\test1\test1\with_groups — two logs from two generators](../images/two-generators-with-groups-two-logs.png)
+
+16. **`without_groups`** should look the same pattern: two logs (**`simulation.log`** and **`simulation2.log`** in the example) — one per generator.
+
+   ![Explorer: Report1\task2\test1\test1\without_groups — two no-group logs](../images/two-generators-without-groups-two-logs.png)
 
 Summary:
 
