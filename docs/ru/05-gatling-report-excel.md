@@ -172,7 +172,7 @@
 
 24. **Финал `without_groups`:** в **`…\test1\test1\without_groups\`** должен остаться **только** **`simulation_without_groups.log`** — переименуйте перенесённый на шаге 22 объединённый лог и **удалите** исходные **`simulation.log`** и **`simulation2.log`**.
 
-### 3.3. `combineB2C_NOZIP.py` (шаги 25–27)
+### 3.3. `combineB2C_NOZIP.py` (шаги 25–28)
 
 Отличие от `combineB2C.py`: **архив не распаковывается** — читаются уже подготовленные **`with_groups/simulation.log`** и **`without_groups/simulation_without_groups.log`**.
 
@@ -184,7 +184,11 @@
 
    ![CMD: combineB2C_NOZIP.py — оба запроса и сохранение itogovii_file.xls](../images/combineB2C_NOZIP-cmd-full-session.png)
 
-Итоговый **`.xls`** создаётся в **`task2`**; вкладки **Errors** и **Requests per min** — по **объединённым** логам двух генераторов.
+28. **В папке `task2`** на одном уровне со скриптом **`combineB2C_NOZIP.py`** появится файл **`itogovii_file.xls`** (или имя из шага 26 с расширением **`.xls`**). Рядом остаются **`test1`**, **`MergeSimulation.py`** и другие файлы вашей разметки.
+
+   ![Проводник: Отчет1\task2 — itogovii_file.xls рядом с combineB2C_NOZIP.py](../images/combineB2C_NOZIP-folder-result-task2.png)
+
+Вкладки **Errors** и **Requests per min** в этой книге — по **объединённым** логам **двух генераторов** (см. раздел 2, шаги 8–9).
 
 ---
 

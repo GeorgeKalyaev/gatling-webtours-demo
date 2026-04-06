@@ -172,7 +172,7 @@ Report1/task2/test1/test1/without_groups/ simulation.log + simulation2.log   (se
 
 24. **Finalize `without_groups`:** only **`simulation_without_groups.log`** should remain in **`…\test1\test1\without_groups\`** — rename the merged file from step 22 and **delete** the original **`simulation.log`** and **`simulation2.log`**.
 
-### 3.3. `combineB2C_NOZIP.py` (steps 25–27)
+### 3.3. `combineB2C_NOZIP.py` (steps 25–28)
 
 Unlike `combineB2C.py`, this script **does not** unpack a zip — it reads **`with_groups/simulation.log`** and **`without_groups/simulation_without_groups.log`** directly.
 
@@ -184,7 +184,11 @@ Unlike `combineB2C.py`, this script **does not** unpack a zip — it reads **`wi
 
    ![CMD: combineB2C_NOZIP.py — both prompts and saving itogovii_file.xls](../images/combineB2C_NOZIP-cmd-full-session.png)
 
-The **`.xls`** is written under **`task2`**; **Errors** and **Requests per min** reflect the **combined** two-generator logs.
+28. Under **`task2`**, next to **`combineB2C_NOZIP.py`**, you get **`itogovii_file.xls`** (or whatever name you entered in step 26 with a **`.xls`** extension). **`test1`**, **`MergeSimulation.py`**, and the rest of your layout stay alongside.
+
+   ![Explorer: Report1\task2 — itogovii_file.xls beside combineB2C_NOZIP.py](../images/combineB2C_NOZIP-folder-result-task2.png)
+
+The **Errors** and **Requests per min** sheets cover the **combined** logs from **both generators** (see section 2, steps 8–9).
 
 ---
 
