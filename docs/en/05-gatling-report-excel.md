@@ -158,7 +158,9 @@ Report1/task2/test1/test1/without_groups/ simulation.log + simulation2.log   (se
 
    ![Explorer: Report1\task2 — script and merged log](../images/MergeSimulation-merged-log-in-task2.png)
 
-20. **`with_groups`:** move that merged file into **`…/test1/test1/with_groups/`**, remove or move aside the original **`simulation.log`** and **`simulation1.log`**, then **rename** the merged file to **`simulation.log`** (only one file with that name should remain for the next step).
+20. **`with_groups`:** move the merged file from **`task2`** (example: **`общий_лог.log`**; yours matches **`output_file`**) into **`Report1\task2\test1\test1\with_groups\`** — note the folder name is **`with_groups`** (with an **s**). The screenshot shows the intermediate state: original **`simulation.log`** / **`simulation1.log`** plus the copied merged log (**`общий_лог.log`**, size roughly the sum of the two sources). Then **delete** or move aside **`simulation.log`** and **`simulation1.log`**, and **rename** the merged file to **`simulation.log`** so **`with_groups`** contains **only** that one file for `combineB2C_NOZIP.py`.
+
+   ![Explorer: with_groups after moving the merged log (before cleanup and rename)](../images/MergeSimulation-merged-log-moved-to-with-groups.png)
 
 21. **`without_groups`:** set **`input_folder`** to **`…/test1/test1/without_groups`**, adjust **`output_file`** if needed, run **`python MergeSimulation.py`** from **`task2`** again (the new merged file lands in **`task2`** again — move it into **`without_groups`**), remove the two source logs, and rename the merged file to **`simulation_without_groups.log`** (as expected by `combineB2C_NOZIP.py`).
 
