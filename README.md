@@ -13,6 +13,7 @@ Learning material for **Gatling**: an **HP WebTours** demo scenario, **Gatling p
 | **1** | [WebTours scenario (Gatling)](docs/en/01-webtours-scenario.md) | [Сценарий WebTours (Gatling)](docs/ru/01-webtours-scenario.md) |
 | **2** | [Shell automation (Linux)](docs/en/02-shell-automation-linux.md) | [Shell-автоматизация (Linux)](docs/ru/02-shell-automation-linux.md) |
 | **3** | [Gatling project structure](docs/en/03-gatling-project-structure.md) | [Описание составляющей части проекта (Gatling)](docs/ru/03-gatling-project-structure.md) |
+| **4** | [`doIf`, error flag, cookie refresh](docs/en/04-session-doif-cookie-refresh.md) | [Проверка ошибки шага (`doIf`) и cookie](docs/ru/04-session-doif-cookie-refresh.md) |
 
 Each page links to the other language at the top. Paths to code and images inside the docs are relative to the repository root.
 
