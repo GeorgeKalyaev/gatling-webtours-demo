@@ -6,6 +6,8 @@ Also covers a **cookie refresh** example and CSV logging when branching the scen
 
 ---
 
+<a id="section-doif-boolean"></a>
+
 ## 1. Checking the previous step: `doIf` and a failure flag
 
 You often want logic like: “if the last request failed, append this user id to a retry file and stop; otherwise continue.”
@@ -107,6 +109,70 @@ scenario("Update session cookie")
 ```
 
 Adjust cookie **name**, **feeder keys**, and **`Action.*`** to your application. The **WebTours** demo in this repo uses a related but smaller pattern (`markAsSucceeded`, `exitHereIfFailed`) in `WebToursCommonScenario.scala` — compare with the Boolean approach above.
+
+---
+
+## 3. Excerpt from notes (cookie refresh, `doIf`, CSV)
+
+Below is the **same idea** as in your course/work notes: refresh `_Instamart_session`, branch on `ifFailed`, append to CSV. It is **not** checked into this repository’s `src`; included here for the portfolio write-up.
+
+**Notes:**
+
+- The combination **`session.set("ifFailed", session.isFailed.toString)`** and **`as[Boolean]`** is again visible — see [section 1 above](#section-doif-boolean): prefer storing a **Boolean** or **`doIf(_.isFailed)`**.
+- Lines with **`appendAll(session("id_polizovat…`** and **`as[S session`** were **truncated** in the PDF/screenshot. Below they are **completed to valid Scala** (session key assumed `id_polizovatelya`); rename if your feeder column differs.
+
+```scala
+package UpdateCookie.UpdateCookies
+
+import io.gatling.core.Predef._
+import io.gatling.core.structure.ScenarioBuilder
+import io.gatling.http.Predef.{Cookie, addCookie}
+
+object CSVUsersUpdateCookie {
+  def apply(): ScenarioBuilder = scenario("CSVUsersUpdateCookie")
+    .exec(new CSVUsersUpdateCookie().scn)
+}
+
+class CSVUsersUpdateCookie {
+  val scn: ScenarioBuilder = scenario("RedisUsersUpdateCookie")
+    .feed(Feeder.UsersForUpdate)
+    .exec(addCookie(Cookie("_Instamart_session", "#{accounts}")))
+    .exec(Action.getMain)
+    .exec { session =>
+      session.set("ifFailed", session.isFailed.toString)
+    }
+    .doIf(session => session("ifFailed").as[Boolean]) {
+      exec { session =>
+        scala.reflect.io.File("OldCookie_Need_Again_b2b_21_12_2023.csv")
+          .appendAll(session("id_polizovatelya").as[String]) // source had truncated "id_polizovat session"
+        session
+      }
+    }
+    .exitHereIfFailed
+    .exec(addCookie(Cookie("_Instamart_session", "#{NewInstamart_session}")))
+    .exec(Action.api_shopping_session_test_auth)
+    .exec { session =>
+      session.set("ifFailed", session.isFailed.toString)
+    }
+    .doIf(session => session("ifFailed").as[Boolean]) {
+      exec { session =>
+        scala.reflect.io.File("OldCookie_Need_Again_b2b_21_12_2023.csv")
+          .appendAll(session("id_polizovatelya").as[String])
+        session
+      }
+    }
+    .exitHereIfFailed
+    .doIf(session => !session("ifFailed").as[Boolean]) {
+      exec { session =>
+        scala.reflect.io.File("NewCokies_b2b_21_12_2023.csv")
+          .appendAll(session("id_polizovatelya").as[String]) // source had truncated "as[S session"
+        session
+      }
+    }
+}
+```
+
+`Feeder.UsersForUpdate`, `Action.getMain`, and `Action.api_shopping_session_test_auth` must exist in your own project.
 
 ---
 

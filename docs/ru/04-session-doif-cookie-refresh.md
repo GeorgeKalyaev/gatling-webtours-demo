@@ -6,6 +6,8 @@
 
 ---
 
+<a id="section-doif-boolean"></a>
+
 ## 1. Проверка предыдущего шага: `doIf` и флаг ошибки
 
 Задача: «если последний запрос завершился с ошибкой — дописать пользователя в файл на доработку и выйти; иначе продолжить».
@@ -107,6 +109,70 @@ scenario("Обновление session cookie")
 ```
 
 Имя cookie, ключи фидера и **`Action.*`** подставляются под ваше приложение. В этом репозитории в **WebTours** есть родственный, но более короткий фрагмент (`markAsSucceeded`, `exitHereIfFailed`) в `WebToursCommonScenario.scala` — имеет смысл сравнить с вариантом с **Boolean** выше.
+
+---
+
+## 3. Фрагмент из конспекта (обновление cookie, `doIf`, CSV)
+
+Ниже — **тот же смысл**, что в ваших материалах: сценарий обновления `_Instamart_session`, ветки по `ifFailed`, запись в CSV. В **этом репозитории исходник не лежит**; блок приведён для портфолио.
+
+**Важно:**
+
+- Здесь снова видно сочетание **`session.set("ifFailed", session.isFailed.toString)`** и **`as[Boolean]`** — см. [раздел 1 выше](#section-doif-boolean): для корректной работы лучше класть **`Boolean`** или использовать **`doIf(_.isFailed)`**.
+- В PDF/скриншотах строки с **`appendAll(session("id_polizovat…`** и **`as[S session`** были **обрезаны**. В коде ниже они **дописаны до валидного Scala** (предполагается ключ сессии `id_polizovatelya`); если у вас другое имя колонки фидера — замените.
+
+```scala
+package UpdateCookie.UpdateCookies
+
+import io.gatling.core.Predef._
+import io.gatling.core.structure.ScenarioBuilder
+import io.gatling.http.Predef.{Cookie, addCookie}
+
+object CSVUsersUpdateCookie {
+  def apply(): ScenarioBuilder = scenario("CSVUsersUpdateCookie")
+    .exec(new CSVUsersUpdateCookie().scn)
+}
+
+class CSVUsersUpdateCookie {
+  val scn: ScenarioBuilder = scenario("RedisUsersUpdateCookie")
+    .feed(Feeder.UsersForUpdate)
+    .exec(addCookie(Cookie("_Instamart_session", "#{accounts}")))
+    .exec(Action.getMain)
+    .exec { session =>
+      session.set("ifFailed", session.isFailed.toString)
+    }
+    .doIf(session => session("ifFailed").as[Boolean]) {
+      exec { session =>
+        scala.reflect.io.File("OldCookie_Need_Again_b2b_21_12_2023.csv")
+          .appendAll(session("id_polizovatelya").as[String]) // было: обрыв «id_polizovat session»
+        session
+      }
+    }
+    .exitHereIfFailed
+    .exec(addCookie(Cookie("_Instamart_session", "#{NewInstamart_session}")))
+    .exec(Action.api_shopping_session_test_auth)
+    .exec { session =>
+      session.set("ifFailed", session.isFailed.toString)
+    }
+    .doIf(session => session("ifFailed").as[Boolean]) {
+      exec { session =>
+        scala.reflect.io.File("OldCookie_Need_Again_b2b_21_12_2023.csv")
+          .appendAll(session("id_polizovatelya").as[String])
+        session
+      }
+    }
+    .exitHereIfFailed
+    .doIf(session => !session("ifFailed").as[Boolean]) {
+      exec { session =>
+        scala.reflect.io.File("NewCokies_b2b_21_12_2023.csv")
+          .appendAll(session("id_polizovatelya").as[String]) // было: обрыв «as[S session»
+        session
+      }
+    }
+}
+```
+
+`Feeder.UsersForUpdate`, `Action.getMain`, `Action.api_shopping_session_test_auth` должны быть определены в вашем проекте.
 
 ---
 
