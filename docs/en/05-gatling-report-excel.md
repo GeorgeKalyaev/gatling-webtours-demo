@@ -75,9 +75,13 @@ While running, it reads:
 
 7. Open the generated **Excel** file (e.g. `statistika.xls`) and confirm the sheets contain data.
 
-8. The **Errors** sheet shows **error statistics for the whole run**: **Error Code**, **Group**, **Endpoint**, and **Count** — log error text, Gatling group, endpoint, and how often it occurred. The **Requests per min** sheet holds per-minute successful-request counts (column layout described above).
+8. The **Errors** sheet shows **error statistics for the whole run**: **Error Code**, **Group**, **Endpoint**, and **Count** — log error text, Gatling group, endpoint, and how often it occurred.
 
    ![Excel, Errors sheet: error statistics for the full test](../images/combineB2C-xls-errors-sheet.png)
+
+9. The **Requests per min** sheet is **requests-per-minute statistics** (**OK** lines from the no-groups log): a **time** column plus four tracked endpoints (app/web order completion, app/web shipment cancellation — headers match `combineB2C.py`).
+
+   ![Excel, Requests per min sheet](../images/combineB2C-xls-requests-per-min.png)
 
 ---
 
