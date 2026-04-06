@@ -1,21 +1,26 @@
 #Название ветки GIT проекта с кодом скриптов для гатлинга
 GIT_BRANCH=master
 #Файл входа для гатлинга с симуляцией по формату "пакет.имя файла без разрешения"
-GATLING_MAINFILE=Scripts.Debug
+GATLING_MAINFILE=NewScripts.Debug
 
-#Маркер автоматической подстановки логпасса при коннекте к гиту, если установлен на false то вручную придется их вбивать по мере выполнения скриптов init и updateGatlingScripts.
-USE_GIT_LOGPASS=true
+# true — логин/пароль в URL при clone/pull (удобно для приватного GitLab/GitHub).
+# false — без вшитых учёток (публичный репозиторий или ввод вручную при запросе).
+USE_GIT_LOGPASS=false
 
 
 
-#Данные для коннекта к гиту
-#HTTP ссылка на гит без HTTPS://
-GIT_URL=gitlab.appline.ru/loadtesting/GatlingAutomation.git
-#Логин гита
+# Данные для коннекта к Git (HTTPS clone/pull).
+# GIT_URL — хост и путь без префикса https://
+#   Пример GitLab: gitlab.com/my-group/my-gatling-project.git
+#   Пример GitHub: github.com/GeorgeKalyaev/gatling-webtours-demo.git
+#   Свой сервер GitLab: gitlab.company.local/group/repo.git
+GIT_URL=github.com/GeorgeKalyaev/gatling-webtours-demo.git
+# Логин (для публичного репозитория часто не нужен — можно любой заглушкой при USE_GIT_LOGPASS)
 GIT_USER=user
-#Пароль гита. Если в пароле присутствует символ @ то его нужно заменить на %40
+# Пароль или токен. Символ @ в пароле заменить на %40
 GIT_PASS=password
 
-#Настройка путей ресурсов и пакета со скриптами в локальном проекте гита (На конце не должно быть символа "/")
-PROJECTGIT_RESOURCES_PATH=./projectGit/dev/scripts/Scripts/src/test/resources
-PROJECTGIT_SCRIPTS_PATH=./projectGit/dev/scripts/Scripts/src/test/scala
+# Пути внутри клонированного репозитория до resources и scala (без "/" на конце).
+# Для этого репозитория (корень = корень клона):
+PROJECTGIT_RESOURCES_PATH=./projectGit/src/test/resources
+PROJECTGIT_SCRIPTS_PATH=./projectGit/src/test/scala

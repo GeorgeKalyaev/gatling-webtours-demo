@@ -13,7 +13,7 @@
    - `GIT_BRANCH`, `GIT_URL`, при необходимости `GIT_USER` / `GIT_PASS`;
    - `USE_GIT_LOGPASS` — автоматическая подстановка логина/пароля в URL при `clone`/`pull`;
    - `GATLING_MAINFILE` — класс симуляции в формате `пакет.ИмяКласса` (без `.scala`);
-   - **`PROJECTGIT_RESOURCES_PATH`** и **`PROJECTGIT_SCRIPTS_PATH`** — относительные пути **внутри клонированного репозитория** до каталогов `src/test/resources` и `src/test/scala` (или вашей фактической структуры). В шаблоне заданы пути вида `./projectGit/dev/scripts/Scripts/src/test/...` — подставьте пути **вашего** проекта.
+   - **`PROJECTGIT_RESOURCES_PATH`** и **`PROJECTGIT_SCRIPTS_PATH`** — относительные пути **внутри клонированного репозитория** до каталогов `src/test/resources` и `src/test/scala` (или вашей фактической структуры). В `setVars.sh` по умолчанию заданы пути под корень этого репозитория: `./projectGit/src/test/...`; для другого проекта замените на свои.
 3. Запустить преднастройку:  
    `sh init.sh`
 4. При выполнении может запроситься **пароль sudo** (установка `git`, `zip` через `apt-get`) и **учётные данные Git** (если `USE_GIT_LOGPASS=false` или для интерактивного clone).
