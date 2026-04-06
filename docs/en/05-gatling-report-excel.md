@@ -13,6 +13,9 @@ This page summarizes a practical workflow: on **Linux**, package a **`<run>_full
 The script is **interactive**. Run it on the host where the **Gatling bundle** lives (example: `gatling-charts-highcharts-bundle-3.9.5`) and **`results/`** contains the run folder (e.g. `debug-20231002164043692` with `simulation.log`).
 
 1. Place `reportsZip.sh` next to the bundle (same level as `gatling-charts-highcharts-bundle-3.9.5`).
+
+   ![Home directory on the load generator: Gatling bundle folder and `reportsZip.sh` side by side](../images/reportsZip-same-level-as-bundle.png)
+
 2. Run: `sh /home/USER/reportsZip.sh` (use your path).
 3. Enter the **full path to the Gatling root**, e.g. `/home/USER/gatling-charts-highcharts-bundle-3.9.5`.
 4. Enter the **full path to `results/`**, e.g. `/home/USER/gatling-charts-highcharts-bundle-3.9.5/results/`.

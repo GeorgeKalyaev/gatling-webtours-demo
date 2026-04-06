@@ -13,6 +13,9 @@
 Скрипт интерактивный: запускать на машине, где лежит **Gatling bundle** (в примере ниже — `gatling-charts-highcharts-bundle-3.9.5`) и каталог **`results/`** с папкой прогона (например `debug-20231002164043692` с `simulation.log`).
 
 1. Положить `reportsZip.sh` рядом с bundle (как в исходной инструкции — на одном уровне с папкой `gatling-charts-highcharts-bundle-3.9.5`).
+
+   ![Каталог home на генераторе: `gatling-charts-highcharts-bundle-3.9.5` и `reportsZip.sh` рядом](../images/reportsZip-same-level-as-bundle.png)
+
 2. Выполнить: `sh /home/USER/reportsZip.sh` (свой путь).
 3. Ввести **полный путь к корню Gatling**, например `/home/USER/gatling-charts-highcharts-bundle-3.9.5`.
 4. Ввести **полный путь к `results/`**, например `/home/USER/gatling-charts-highcharts-bundle-3.9.5/results/`.
