@@ -89,7 +89,84 @@ pkill -f 'gatling'
 
 ---
 
-## 4. Связь с остальным материалом
+## 4. Генерация отчёта вручную после принудительной остановки
+
+Если прогон оборвали **`pkill`** или иначе без штатного завершения, Gatling **сам** HTML-отчёт мог не собрать. Тогда отчёт строят командой **reports-only** (**`-ro`**) по уже записанному **`simulation.log`** в папке результата.
+
+1. Откройте **`…/gatling-charts-highcharts-bundle-3.9.5_new/results/`** (или ваш путь к **`results`** внутри bundle).
+
+   ![WinSCP: каталог results и папки debug-…](../images/gatling-report-manual-results-folder.png)
+
+2. Выберите нужный прогон по имени папки **`debug-…`**. Внутри должна быть **`simulation.log`**.
+
+   ![WinSCP: внутри debug-папки — simulation.log](../images/gatling-report-manual-simulation-log.png)
+
+3. Из каталога bundle (или с корректным **`PATH`**) выполните **`gatling.sh -ro`**, указав **полный путь к выбранной папке `debug-…`** (без слэша в конце или по правилам вашей версии Gatling):
+
+```bash
+/home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5_new/bin/gatling.sh -ro /home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5_new/results/debug-20230829215021235
+```
+
+Подставьте свой путь и имя папки. Генерация может занять заметное время.
+
+4. После завершения рядом с **`simulation.log`** появятся **`index.html`** и сопутствующие файлы отчёта (группы, запросы и т.д.). Откройте **`index.html`** в браузере.
+
+   ![WinSCP: после -ro — index.html и файлы отчёта](../images/gatling-report-manual-index-html.png)
+
+Точный контракт аргумента **`-ro`** (абсолютный путь vs имя относительно **`results`**) смотрите в документации вашей версии Gatling.
+
+---
+
+## 5. Возможности для анализа логов
+
+### 5.1. Ошибки в **`simulation.log`** (в папке **`debug-…`**)
+
+Рабочий каталог — папка с **`simulation.log`**, например:
+
+```bash
+cd ~/gatling-charts-highcharts-bundle-3.9.5_new/results/debug-20230831210522588
+```
+
+**1.** Сводка по ответам с нужным текстом ошибки (пример для **`found 500`**): взять 3-ю колонку, убрать числовые суффиксы в путях, посчитать уникальные эндпоинты, сортировка по возрастанию счётчика:
+
+```bash
+date; cat simulation.log | grep "found 500" | awk '{print $3}' | sed 's/-[0-9]*//g' | sort | uniq -c | sort -h
+```
+
+Тот же приём подходит для **`found 404`**, **`found 429`** и т.д. На скриншоте ниже — **аналогичный** разбор для **`found 429`**.
+
+   ![Терминал: подсчёт found 429 по эндпоинтам](../images/gatling-log-analysis-http-status-pipeline.png)
+
+**2.** Все неуспешные строки **`REQUEST`**: седьмое поле (сообщение об ошибке), частоты:
+
+```bash
+cat simulation.log | grep REQUEST | grep -v OK | awk -F'\t' '{print $7}' | sort | uniq -c | sort
+```
+
+   ![Терминал: сводка по полю ошибки REQUEST (не OK)](../images/gatling-log-analysis-request-ko.png)
+
+Формат колонок в логе зависит от версии Gatling; при смещении полей поправьте номер в **`awk`**.
+
+### 5.2. Подробный **`debug-…T….log`** в корне bundle
+
+**3.** В корне установки Gatling лежат тяжёлые логи консоли вида **`debug-20230829T215018.484.log`**.
+
+   ![WinSCP: корень bundle — debug-*.log рядом с bin, results, user-files](../images/gatling-bundle-root-debug-logs.png)
+
+Пример: отфильтровать **`found 404`**, сгруппировать одинаковые строки, убрать шум **`DEBUG`** (**`grep -P`** — из **GNU grep**; на macOS может понадобиться **`ggrep`** или другой шаблон):
+
+```bash
+cd /home/g_kalyaev/gatling-charts-highcharts-bundle-3.9.5_new
+grep -P "found 404" debug-20230710T191846.316.log | sort | uniq -c | sort | grep -v DEBUG
+```
+
+Имя файла **`debug-….log`** подставьте своё.
+
+   ![Терминал: grep по большому debug-логу (found 404)](../images/gatling-log-analysis-debug-file-404.png)
+
+---
+
+## 6. Связь с остальным материалом
 
 - Автоматизация через **`init.sh` / setVars.sh`** и копирование из Git описаны в [Shell-автоматизация (Linux)](02-shell-automation-linux.md).
 - Сбор **`…_full.zip`** и Excel — [Отчёт Gatling: архив, Excel, два генератора](05-gatling-report-excel.md).
