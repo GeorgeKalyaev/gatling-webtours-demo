@@ -222,6 +222,18 @@ session.set("body", body)
 
 В реальном прогоне порядок элементов в `items` и набор `id` зависят от `Random.shuffle` и `take(numBlocks)`; числа в `location` будут другими при других случайных суффиксах.
 
+### Скриншоты Fiddler (инспектор JSON)
+
+Так выглядит сгенерированное тело запроса в **Fiddler Classic** при прогоне через прокси (`Debug.scala`): вкладка **JSON** для запроса к `127.0.0.1:1080/cgi-bin/welcome.pl?page=search`.
+
+**Два элемента в `items`:**
+
+![Fiddler: JSON с двумя позициями в items](docs/images/fiddler-json-two-items.png)
+
+**Пять элементов в `items` (максимум в скрипте):**
+
+![Fiddler: JSON с пятью позициями в items](docs/images/fiddler-json-five-items.png)
+
 ---
 
 ## Отладка HTTP
