@@ -14,7 +14,7 @@ Learning material for **Gatling**: an **HP WebTours** demo scenario and **bash a
 
 | Section | Topics |
 |--------|--------|
-| **[1. WebTours scenario (Gatling)](#en-webtours)** | Simulation code, response checks, session, JSON, Fiddler, logback, proxy |
+| **[1. WebTours scenario (Gatling)](#en-webtours)** | [Project structure](#en-structure), simulation code, checks, session, JSON, Fiddler, logback, proxy |
 | **[2. Shell automation (Linux)](#en-shell)** | Scripts in `src/test/gatlingautomation-master`, setup, `setVars.sh`, reports |
 
 ---
@@ -31,6 +31,60 @@ A load-test style scenario for the **HP WebTours** demo app: HTTP steps, respons
 - `NewScripts.WebTours.WebTours` (scenario in `WebToursCommonScenario.scala`) — step groups, feeders, session data generation.
 - `NewScripts.WebTours.WebToursFeeder` and CSVs under `src/test/resources` — virtual user and city data.
 - `src/test/resources/logback-test.xml` — optional detailed HTTP response logging to a file.
+
+<a id="en-structure"></a>
+
+### Project structure (“script tree”)
+
+Slides and PDFs often mix **numbered bullets** with full IDE screenshots. In a GitHub README it is usually clearer to use a **text directory tree**, short prose, and **fenced code** for the fragments that matter. You do not have to crop screenshots to “code only”—repeat the important snippets in markdown instead; they stay searchable and match the branch.
+
+#### Layout of this repo (`src/test`)
+
+```text
+src/test/
+├── resources/                      ← data pools & Gatling config
+│   ├── City.csv
+│   ├── Users.csv
+│   ├── gatling.conf
+│   └── logback-test.xml
+├── scala/NewScripts/
+│   ├── Debug.scala                 ← Simulation: setUp(), inject, protocol
+│   ├── HttpSberMarket.scala        ← shared Protocols + FeederGlobe (template)
+│   └── WebTours/
+│       ├── WebToursAction.scala    ← HTTP steps + checks
+│       ├── WebToursCommonScenario.scala
+│       └── WebToursFeeder.scala
+└── gatlingautomation-master/       ← Linux shell automation (see §2)
+```
+
+#### What lives where
+
+- **`resources/`** — CSV feeders (“pools”), `gatling.conf`, `logback-test.xml`. Gatling resolves feeder file names relative to this folder.
+- **`scala/...`** — `Simulation` subclasses and scenarios. In SBT projects this is typically under `src/test/scala` (Gatling bundle: `user-files/simulations`).
+
+#### Pattern common in large suites (many use cases)
+
+Teams often add **one package per business flow** (e.g. `UC26_...`) with three recurring file roles:
+
+| Piece | Typical name | Role |
+|-------|----------------|------|
+| **Actions** | `*Action` | `HttpRequestBuilder`s: path, headers, body, `check` / correlation (`regex`, `jsonPath`, …). |
+| **Scenario** | `*CommonScenario` / `*CommonScena` | `scenario(...)`: `feed`, `group`, `exec`, calling `*Action` values in order. |
+| **Feeder** | `*Feeder` | `csv(...)` / iterators for that flow, or thin wrappers over shared pools. |
+
+Cross-cutting pieces are placed at package level, similar to this repo’s **`Debug`** (simulation entry), **`Protocols`** (HTTP defaults), and **`FeederGlobe`** (shared CSV feeders).
+
+#### Shared HTTP defaults — `Protocols`
+
+[`HttpSberMarket.scala`](src/test/scala/NewScripts/HttpSberMarket.scala) defines `package object Protocols` with one or more `HttpProtocolBuilder` values (`baseUrl`, headers, global `check(status.in(...))`). That is the “single place for environment-specific HTTP” pattern from larger Gatling codebases (Web / B2B / API variants in one object).
+
+#### Shared data pools — `FeederGlobe`
+
+The same file defines `object FeederGlobe` with `csv("SomeFile.csv").circular` lines. Those files are expected under `resources/`. **This demo repo** lists several names as **templates** without committing every CSV; in a full project the names match real pool files.
+
+#### `Simulation` entry — `Debug` and load profile
+
+[`Debug.scala`](src/test/scala/NewScripts/Debug.scala) extends `Simulation` and runs `setUp(...)`. [`VariablesOfCycles`](src/test/scala/NewScripts/Debug.scala) (same file) holds scenario tuning constants (here `CityCount`). A full profile often adds per-UC intensity coefficients and `inject(rampUsersPerSec(...), constantUsersPerSec(...))` as in course materials; this repository keeps a minimal `atOnceUsers(1)` example plus proxy.
 
 ---
 
@@ -368,7 +422,7 @@ collect...     →  reports + zip in results/
 
 | Раздел | О чём |
 |--------|--------|
-| **[1. Сценарий WebTours (Gatling)](#ru-1-webtours)** | Код симуляции, проверки ответов, сессия, JSON, Fiddler, logback, прокси |
+| **[1. Сценарий WebTours (Gatling)](#ru-1-webtours)** | [Структура проекта](#ru-structure), код симуляции, проверки, сессия, JSON, Fiddler, logback, прокси |
 | **[2. Shell-автоматизация (Linux)](#ru-2-shell)** | Скрипты в `src/test/gatlingautomation-master`, установка, `setVars.sh`, отчёты |
 
 ---
@@ -385,6 +439,60 @@ collect...     →  reports + zip in results/
 - `NewScripts.WebTours.WebTours` (сценарий в `WebToursCommonScenario.scala`) — группы шагов, фидеры, генерация данных в сессии.
 - `NewScripts.WebTours.WebToursFeeder` и CSV в `src/test/resources` — данные для виртуальных пользователей и городов.
 - `src/test/resources/logback-test.xml` — при необходимости подробный лог HTTP-ответов в файл.
+
+<a id="ru-structure"></a>
+
+### Структура проекта («дерево скриптов»)
+
+В презентациях и PDF часто идут **нумерованные пункты** вместе со скриншотами IDE. В README на GitHub обычно удобнее **дерево каталогов в тексте**, короткие пояснения и **код в блоках** — не нужно «вырезать» со скрина только код: важные фрагменты дублируют в markdown; так проще искать и версия всегда совпадает с веткой.
+
+#### Этот репозиторий (`src/test`)
+
+```text
+src/test/
+├── resources/                      ← пулы данных и конфиг Gatling
+│   ├── City.csv
+│   ├── Users.csv
+│   ├── gatling.conf
+│   └── logback-test.xml
+├── scala/NewScripts/
+│   ├── Debug.scala                 ← Simulation: setUp(), inject, протокол
+│   ├── HttpSberMarket.scala        ← общие Protocols + FeederGlobe (шаблон)
+│   └── WebTours/
+│       ├── WebToursAction.scala    ← HTTP-шаги и проверки
+│       ├── WebToursCommonScenario.scala
+│       └── WebToursFeeder.scala
+└── gatlingautomation-master/       ← shell-автоматизация Linux (см. §2)
+```
+
+#### Роли каталогов
+
+- **`resources/`** — CSV-фидеры («пулы»), `gatling.conf`, `logback-test.xml`. Имена файлов для `csv(...)` резолвятся относительно этой папки.
+- **`scala/...`** — классы `Simulation` и сценарии. В SBT это обычно `src/test/scala`; в bundle Gatling — `user-files/simulations`.
+
+#### Типичный паттерн в крупных проектах (много UC)
+
+Часто делают **отдельный пакет на бизнес-поток** (например `UC26_...`) и три типа файлов:
+
+| Часть | Типичное имя | Назначение |
+|-------|----------------|------------|
+| **Действия** | `*Action` | `HttpRequestBuilder`: путь, заголовки, тело, `check` / корреляция (`regex`, `jsonPath`, …). |
+| **Сценарий** | `*CommonScenario` / `*CommonScena` | `scenario(...)`: `feed`, `group`, `exec`, вызовы `*Action` в нужном порядке. |
+| **Фидер** | `*Feeder` | `csv(...)` / итераторы для этого потока или обёртки над общими пулами. |
+
+Общие вещи выносят на уровень пакета — как здесь **`Debug`** (точка входа симуляции), **`Protocols`** (HTTP по умолчанию) и **`FeederGlobe`** (общие CSV).
+
+#### Общие HTTP-настройки — `Protocols`
+
+В [`HttpSberMarket.scala`](src/test/scala/NewScripts/HttpSberMarket.scala) объявлен `package object Protocols` с одним или несколькими `HttpProtocolBuilder` (`baseUrl`, заголовки, общий `check(status.in(...))`). Это приём «одно место для окружений» из больших наборов сценариев (Web / B2B / API и т.д.).
+
+#### Общие пулы — `FeederGlobe`
+
+В том же файле — `object FeederGlobe` с строками вида `csv("Имя.csv").circular`. Файлы ожидаются в **`resources/`**. В **этом демо-репозитории** часть имён задана как **шаблон** без всех CSV в Git; в боевом проекте имена совпадают с реальными пулами.
+
+#### Точка входа `Simulation` — `Debug` и профиль нагрузки
+
+[`Debug.scala`](src/test/scala/NewScripts/Debug.scala) расширяет `Simulation` и задаёт `setUp(...)`. Объект [`VariablesOfCycles`](src/test/scala/NewScripts/Debug.scala) в том же файле — константы настройки сценария (здесь `CityCount`). В полноценном профиле часто добавляют коэффициенты интенсивности по UC и `inject(rampUsersPerSec(...), constantUsersPerSec(...))`, как в учебных материалах; здесь оставлен минимальный пример `atOnceUsers(1)` и прокси.
 
 ---
 
