@@ -4,6 +4,25 @@ Learning material for **Gatling**: an **HP WebTours** demo scenario, **Gatling p
 
 **Repository:** [github.com/GeorgeKalyaev/gatling-webtours-demo](https://github.com/GeorgeKalyaev/gatling-webtours-demo)
 
+## Project layout
+
+```text
+src/test/
+├── resources/
+│   ├── gatling.conf
+│   ├── logback-test.xml
+│   ├── City.csv
+│   └── Users.csv
+├── scala/NewScripts/
+│   ├── Debug.scala
+│   ├── HttpSberMarket.scala
+│   └── WebTours/
+│       ├── WebToursAction.scala
+│       ├── WebToursCommonScenario.scala
+│       └── WebToursFeeder.scala
+└── gatlingautomation-master/
+```
+
 ---
 
 ## Documentation
